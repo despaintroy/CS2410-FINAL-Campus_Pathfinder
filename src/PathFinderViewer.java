@@ -8,6 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -15,6 +16,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class PathFinderViewer extends Application {
@@ -23,7 +25,7 @@ public class PathFinderViewer extends Application {
     final int LEFT_WIDTH = 200;
     final int VIEWPORT_HEIGHT = 512;
     final int VIEWPORT_WIDTH = 725;
-    final int SCALE = 2;
+    final double SCALE = 1.93;
 
     @Override
     public void start(Stage primaryStage) {
@@ -48,8 +50,8 @@ public class PathFinderViewer extends Application {
         Text tempText = new Text();
         tempText.setFill(Color.WHITE);
         tempText.setFont(Font.font("helvetica", 20));
-        tempText.setText("Temperature: " + Weather.getTempF() + "℉");
-//        tempText.setText("Temperature: " + 0 + "℉");
+//        tempText.setText("Temperature: " + (int)Weather.getTempF() + "℉");
+        tempText.setText("Temperature: " + 0 + "℉");
 
         horizontal.getChildren().addAll(tempText);
 
@@ -78,10 +80,14 @@ public class PathFinderViewer extends Application {
 
     Pane buildCenterPane() {
 
-        System.out.println(System.getProperty("user.dir"));
+        System.out.println("Importing files...");
+
+        Graph newGraph = new Graph("savedNodes.txt", "savedEdges.txt");
 
         StackPane stack = new StackPane();
         Pane graph = new Pane();
+
+        System.out.println("Drawing image...");
 
         try {
             FileInputStream inputstream = new FileInputStream("campus_map.png");
@@ -95,23 +101,51 @@ public class PathFinderViewer extends Application {
             e.printStackTrace();
         }
 
+        System.out.println("Drawing nodes...");
 
-        try {
-            Scanner inFile = new Scanner(new File("savedNodes.txt"));
-            while (inFile.hasNextLine()) {
-                String line = inFile.nextLine();
-                String [] coords = line.split(" ");
-                float x = Float.parseFloat(coords[0]);
-                float y = Float.parseFloat(coords[1]);
+        float [][] nodeCoords = newGraph.getNodeCoords();
+        ArrayList<Float[]> edgeCoords = newGraph.getEdgeCoords();
 
-                Circle temp = new Circle(x/SCALE, y/SCALE,2, Color.RED);
-                graph.getChildren().add(temp);
-            }
-            stack.getChildren().add(graph);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        for (float[] coord : nodeCoords) {
+
+            float x = coord[0];
+            float y = coord[1];
+
+            Circle temp = new Circle(x/SCALE, y/SCALE,2, Color.RED);
+            graph.getChildren().add(temp);
         }
 
+        System.out.println("Drawing edges...");
+
+        for (Float[] coords : edgeCoords) {
+            float x1 = coords[0];
+            float y1 = coords[1];
+            float x2 = coords[2];
+            float y2 = coords[3];
+
+            Line temp = new Line(x1/SCALE, y1/SCALE, x2/SCALE, y2/SCALE);
+            temp.setStroke(Color.BLACK);
+            graph.getChildren().add(temp);
+        }
+
+        stack.getChildren().add(graph);
+
+//        try {
+//            Scanner inFile = new Scanner(new File("savedNodes.txt"));
+//            while (inFile.hasNextLine()) {
+//                String line = inFile.nextLine();
+//                String [] coords = line.split(" ");
+//                float x = Float.parseFloat(coords[0]);
+//                float y = Float.parseFloat(coords[1]);
+//
+//                Circle temp = new Circle(x/SCALE, y/SCALE,2, Color.RED);
+//                graph.getChildren().add(temp);
+//            }
+//            stack.getChildren().add(graph);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//
         return stack;
     }
 }
