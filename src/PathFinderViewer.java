@@ -50,8 +50,8 @@ public class PathFinderViewer extends Application {
         Text tempText = new Text();
         tempText.setFill(Color.WHITE);
         tempText.setFont(Font.font("helvetica", 20));
-//        tempText.setText("Temperature: " + (int)Weather.getTempF() + "℉");
-        tempText.setText("Temperature: " + 0 + "℉");
+        tempText.setText("Temperature: " + (int)Weather.getTempF() + "℉");
+//        tempText.setText("Temperature: " + 0 + "℉");
 
         horizontal.getChildren().addAll(tempText);
 
@@ -80,14 +80,10 @@ public class PathFinderViewer extends Application {
 
     Pane buildCenterPane() {
 
-        System.out.println("Importing files...");
-
         Graph newGraph = new Graph("savedNodes.txt", "savedEdges.txt");
 
         StackPane stack = new StackPane();
         Pane graph = new Pane();
-
-        System.out.println("Drawing image...");
 
         try {
             FileInputStream inputstream = new FileInputStream("campus_map.png");
@@ -101,8 +97,6 @@ public class PathFinderViewer extends Application {
             e.printStackTrace();
         }
 
-        System.out.println("Drawing nodes...");
-
         float [][] nodeCoords = newGraph.getNodeCoords();
         ArrayList<Float[]> edgeCoords = newGraph.getEdgeCoords();
 
@@ -111,11 +105,9 @@ public class PathFinderViewer extends Application {
             float x = coord[0];
             float y = coord[1];
 
-            Circle temp = new Circle(x/SCALE, y/SCALE,2, Color.RED);
+            Circle temp = new Circle(x/SCALE, y/SCALE,2, Style.nodeColor);
             graph.getChildren().add(temp);
         }
-
-        System.out.println("Drawing edges...");
 
         for (Float[] coords : edgeCoords) {
             float x1 = coords[0];
@@ -124,28 +116,12 @@ public class PathFinderViewer extends Application {
             float y2 = coords[3];
 
             Line temp = new Line(x1/SCALE, y1/SCALE, x2/SCALE, y2/SCALE);
-            temp.setStroke(Color.BLACK);
+            temp.setStroke(Style.edgeColor);
             graph.getChildren().add(temp);
         }
 
         stack.getChildren().add(graph);
 
-//        try {
-//            Scanner inFile = new Scanner(new File("savedNodes.txt"));
-//            while (inFile.hasNextLine()) {
-//                String line = inFile.nextLine();
-//                String [] coords = line.split(" ");
-//                float x = Float.parseFloat(coords[0]);
-//                float y = Float.parseFloat(coords[1]);
-//
-//                Circle temp = new Circle(x/SCALE, y/SCALE,2, Color.RED);
-//                graph.getChildren().add(temp);
-//            }
-//            stack.getChildren().add(graph);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//
         return stack;
     }
 }
