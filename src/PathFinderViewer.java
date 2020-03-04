@@ -1,26 +1,14 @@
-import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Scanner;
 
 public class PathFinderViewer extends Application {
 
@@ -56,8 +44,14 @@ public class PathFinderViewer extends Application {
         Text tempText = new Text();
         tempText.setFill(Color.WHITE);
         tempText.setFont(Font.font("helvetica", 20));
-//        tempText.setText("Temperature: " + Math.round(Weather.getTempF()) + "℉");
-        tempText.setText("Temperature: " + 0 + "℉");
+
+        try {
+            tempText.setText("Temperature: " + Math.round(Weather.getTempF()) + "℉");
+        }
+        catch (Weather.CannotGetTempException e) {
+            tempText.setText("Temperature: ");
+        }
+//        tempText.setText("Temperature: " + 0 + "℉");
 
         horizontal.getChildren().addAll(tempText);
 
