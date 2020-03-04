@@ -41,7 +41,6 @@ public class Weather {
                 String returned = content.toString();
 
                 String temp = returned.substring(returned.indexOf("value")+7, returned.indexOf("value")+7+4);
-                System.out.println(temp);
 
                 con.disconnect();
                 return Float.parseFloat(temp);
@@ -57,17 +56,6 @@ public class Weather {
             e.printStackTrace();
             System.out.println("There is an error!!!!!!!!!!!!!!");
         }
-
-//        OkHttpClient client = new OkHttpClient();
-//
-//        Request request = new Request.Builder()
-//                .url("https://climacell-microweather-v1.p.rapidapi.com/weather/nowcast?fields=precipitation&unit_system=si&lat=42.8237618&lon=-71.2216286")
-//                .get()
-//                .addHeader("x-rapidapi-host", "climacell-microweather-v1.p.rapidapi.com")
-//                .addHeader("x-rapidapi-key", "e8474ed0b6mshbaa0ce183838137p133febjsnec51952628de")
-//                .build();
-//
-//        Response response = client.newCall(request).execute();
 
         return -1;
     }
