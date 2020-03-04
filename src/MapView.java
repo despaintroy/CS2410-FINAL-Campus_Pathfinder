@@ -75,8 +75,8 @@ public class MapView {
 
     public void findPath() {
 
-        int start = 0;
-        int end = 3;
+        int start = (int)(Math.random()*810);
+        int end = (int)(Math.random()*810);
 
         Dijkstra pathFinder = new Dijkstra(newGraph.adjacency, start, end);
         ArrayList<Integer> bestPath = pathFinder.findPath();
@@ -85,7 +85,7 @@ public class MapView {
         Circle startCircle = new Circle(newGraph.nodes.get(start).x/SCALE, newGraph.nodes.get(start).y/SCALE, 5 , Style.edgeColor);
         Circle endCircle = new Circle(newGraph.nodes.get(end).x/SCALE, newGraph.nodes.get(end).y/SCALE, 5 , Style.edgeColor);
 
-        System.out.println("The best path is: " + bestPath);
+//        System.out.println("The best path is: " + bestPath);
 
         graph.getChildren().clear();
 
