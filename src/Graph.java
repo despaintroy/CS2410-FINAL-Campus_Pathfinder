@@ -5,11 +5,12 @@ import javafx.scene.shape.Circle;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Graph {
 
-    float [][] adjacency;
+    double [][] adjacency;
     ArrayList<Node> nodes;
     boolean [][] edges;
 
@@ -32,6 +33,11 @@ public class Graph {
         }
 
         edges = new boolean[nodes.size()][nodes.size()];
+        adjacency = new double[nodes.size()][nodes.size()];
+
+        for (double[] line : adjacency) {
+            Arrays.fill(line, -1);
+        }
 
         try {
             Scanner inFile = new Scanner(new File(edgesFile));
@@ -39,13 +45,21 @@ public class Graph {
                 String line = inFile.nextLine();
                 String [] inSplit = line.split(" ");
                 for (int j=0; j<=i; j++) {
-                    edges[i][j] = inSplit[j].equals("1");
+                    if (inSplit[j].equals("1")) {
+                        edges[i][j] = true;
+
+                        // Create the adjacency matrix
+                        double [] p1 = {nodes.get(i).x, nodes.get(i).y};
+                        double [] p2 = {nodes.get(j).x, nodes.get(j).y};
+                        adjacency[i][j] = dist(p1, p2);
+                    }
                  }
             }
             inFile.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
@@ -61,6 +75,14 @@ public class Graph {
         for (boolean[] line : edges) {
             for (boolean e : line) {
                 build += (e ? "1" : "0") + " ";
+            }
+            build += "\n";
+        }
+        build += "\n\n";
+
+        for (double[] line : adjacency) {
+            for (double e : line) {
+                build += Math.round(e) + "\t";
             }
             build += "\n";
         }
@@ -94,5 +116,13 @@ public class Graph {
             }
         }
         return temp;
+    }
+
+    void findPath() {
+        return;
+    }
+
+    double dist(double[] p1, double[] p2) {
+        return Math.sqrt(p1[0]*p2[0] + p1[1]+p2[1]);
     }
 }
