@@ -2,6 +2,7 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,6 +18,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Scanner;
 
 public class PathFinderViewer extends Application {
@@ -25,7 +27,8 @@ public class PathFinderViewer extends Application {
     final int LEFT_WIDTH = 200;
     final int VIEWPORT_HEIGHT = 512;
     final int VIEWPORT_WIDTH = 725;
-    final double SCALE = 1.93;
+
+    MapView map = new MapView(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
 
     @Override
     public void start(Stage primaryStage) {
@@ -34,7 +37,7 @@ public class PathFinderViewer extends Application {
 
         myPane.setLeft(buildLeftPane());
         myPane.setTop(buildTopPane());
-        myPane.setCenter(buildCenterPane());
+        myPane.setCenter(buildCenterPane(map));
 
         Scene scene = new Scene(myPane, LEFT_WIDTH+VIEWPORT_WIDTH, TOP_HEIGHT+VIEWPORT_HEIGHT);
         primaryStage.setTitle("Campus Pathfinder");
@@ -50,8 +53,8 @@ public class PathFinderViewer extends Application {
         Text tempText = new Text();
         tempText.setFill(Color.WHITE);
         tempText.setFont(Font.font("helvetica", 20));
-        tempText.setText("Temperature: " + (int)Weather.getTempF() + "℉");
-//        tempText.setText("Temperature: " + 0 + "℉");
+//        tempText.setText("Temperature: " + Math.round(Weather.getTempF()) + "℉");
+        tempText.setText("Temperature: " + 0 + "℉");
 
         horizontal.getChildren().addAll(tempText);
 
@@ -71,57 +74,64 @@ public class PathFinderViewer extends Application {
                         "Family Life"
                 );
         final ComboBox buildingChoice = new ComboBox(options);
+        final Button submitButton = new Button("Find Path");
+        submitButton.setOnAction(e -> map.findPath());
+
         VBox pane = new VBox();
-        pane.getChildren().addAll(buildingChoice);
+        pane.getChildren().addAll(buildingChoice, submitButton);
         pane.setStyle("-fx-background-color: rgb(65, 90, 100);");
         pane.setPrefWidth(LEFT_WIDTH);
         return pane;
     }
 
-    Pane buildCenterPane() {
+    Pane buildCenterPane(MapView m) {
 
-        Graph newGraph = new Graph("savedNodes.txt", "savedEdges.txt");
+        return m.viewPane;
 
-        StackPane stack = new StackPane();
-        Pane graph = new Pane();
-
-        try {
-            FileInputStream inputstream = new FileInputStream("campus_map.png");
-            Image image = new Image(inputstream);
-            ImageView iv1 = new ImageView();
-            iv1.setImage(image);
-            iv1.setFitWidth(VIEWPORT_WIDTH);
-            iv1.setFitHeight(VIEWPORT_HEIGHT);
-            stack.getChildren().addAll(iv1);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        float [][] nodeCoords = newGraph.getNodeCoords();
-        ArrayList<Float[]> edgeCoords = newGraph.getEdgeCoords();
-
-        for (float[] coord : nodeCoords) {
-
-            float x = coord[0];
-            float y = coord[1];
-
-            Circle temp = new Circle(x/SCALE, y/SCALE,2, Style.nodeColor);
-            graph.getChildren().add(temp);
-        }
-
-        for (Float[] coords : edgeCoords) {
-            float x1 = coords[0];
-            float y1 = coords[1];
-            float x2 = coords[2];
-            float y2 = coords[3];
-
-            Line temp = new Line(x1/SCALE, y1/SCALE, x2/SCALE, y2/SCALE);
-            temp.setStroke(Style.edgeColor);
-            graph.getChildren().add(temp);
-        }
-
-        stack.getChildren().add(graph);
-
-        return stack;
+//        Graph newGraph = new Graph("savedNodes.txt", "savedEdges.txt");
+//
+////        System.out.println(newGraph);
+//
+//        StackPane stack = new StackPane();
+//        Pane graph = new Pane();
+//
+//        try {
+//            FileInputStream inputstream = new FileInputStream("campus_map.png");
+//            Image image = new Image(inputstream);
+//            ImageView iv1 = new ImageView();
+//            iv1.setImage(image);
+//            iv1.setFitWidth(VIEWPORT_WIDTH);
+//            iv1.setFitHeight(VIEWPORT_HEIGHT);
+//            stack.getChildren().addAll(iv1);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//
+//        float [][] nodeCoords = newGraph.getNodeCoords();
+//        ArrayList<Float[]> edgeCoords = newGraph.getEdgeCoords();
+//
+//        for (float[] coord : nodeCoords) {
+//
+//            float x = coord[0];
+//            float y = coord[1];
+//
+//            Circle temp = new Circle(x/SCALE, y/SCALE,2, Style.nodeColor);
+//            graph.getChildren().add(temp);
+//        }
+//
+//        for (Float[] coords : edgeCoords) {
+//            float x1 = coords[0];
+//            float y1 = coords[1];
+//            float x2 = coords[2];
+//            float y2 = coords[3];
+//
+//            Line temp = new Line(x1/SCALE, y1/SCALE, x2/SCALE, y2/SCALE);
+//            temp.setStroke(Style.edgeColor);
+//            graph.getChildren().add(temp);
+//        }
+//
+//        stack.getChildren().add(graph);
+//
+//        return stack;
     }
 }
