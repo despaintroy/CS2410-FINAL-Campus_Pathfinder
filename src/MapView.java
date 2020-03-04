@@ -14,11 +14,14 @@ public class MapView {
     final double SCALE = 1.93;
     final int VIEWPORT_WIDTH;
     final int VIEWPORT_HEIGHT;
+
     Pane viewPane;
     Pane graph;
     Graph newGraph;
 
     public MapView(int viewport_width, int viewport_height) {
+
+        System.out.println("Loading mapview...");
 
         VIEWPORT_WIDTH = viewport_width;
         VIEWPORT_HEIGHT = viewport_height;
@@ -72,8 +75,8 @@ public class MapView {
 
     public void findPath() {
 
-        int start = 100;
-        int end = 500;
+        int start = 0;
+        int end = 3;
 
         Dijkstra pathFinder = new Dijkstra(newGraph.adjacency, start, end);
         ArrayList<Integer> bestPath = pathFinder.findPath();

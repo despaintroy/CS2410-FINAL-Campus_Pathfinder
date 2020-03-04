@@ -1,3 +1,4 @@
+import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,6 +33,8 @@ public class PathFinderViewer extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+
+        System.out.println("Constructing panes...");
 
         BorderPane myPane = new BorderPane();
 

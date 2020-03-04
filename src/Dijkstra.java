@@ -1,115 +1,123 @@
+import javax.sound.midi.Soundbank;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Dijkstra {
 
     double [][] graph;
-    PathNode[] pathNodes;
+    Info [][] matrix;
     int start;
     int destination;
 
     public Dijkstra(double[][] graph, int start, int destination) {
+
         this.graph = graph;
         this.start = start;
         this.destination = destination;
-        pathNodes = new PathNode[graph.length];
 
-        for (int i=0; i<pathNodes.length; i++) {
-            pathNodes[i] = new PathNode();
+        matrix = new Info[graph.length][graph.length];
+
+        for (int i=0; i<matrix.length; i++) {
+            for (int j=0; j<matrix.length; j++) {
+                matrix[i][j] = new Info(-1, Double.MAX_VALUE);
+            }
         }
     }
 
     public ArrayList<Integer> findPath() {
 
-        ArrayList<Integer> best = new ArrayList<Integer>();
-
-        pathNodes[start].distance = 0;
-        pathNodes[start].parent = start;
-
-        find(start);
-
-        int curr = destination;
-
-        while (curr != start) {
-            best.add(0, curr);
-            curr = pathNodes[curr].parent;
-        }
-        best.add(0, pathNodes[curr].parent);
-
-        return best;
-    }
-
-    private void find(int curr) {
-
-//        System.out.println(
-//                "\n\nCurrent: " + curr +
-//                "\nParent: " + pathNodes[curr].parent
-//        );
-
-        // Detect if the destination node is found
-        if (curr == destination) {
-//            System.out.println("My value is the destination!");
-            return;
-        }
-
-        // Find all nodes connected to this one that we can travel to
+        ArrayList<Integer> currList = new ArrayList<>();
         ArrayList<Integer> nextList = new ArrayList<>();
 
-        for (int i=0; i<graph.length; i++) {
-            for (int j=0; j<i; j++) {
+        currList.add(start);
 
-                // Determine if this edge is on the graph
-                if (graph[i][j] >= 0) {
+        matrix[0][start] = new Info(start, 0);
 
-                    int next = -1;
+//        printMatrix();
 
-                    // Find if this is a next node
-                    if (i == curr) {
-                        next = j;
-                    } else if (j == curr) {
-                        next = i;
+        for (int level=1; level<matrix.length; level++) {
+
+            matrix[level] = matrix[level - 1].clone();
+
+//            printMatrix();
+
+            for (int curr : currList) {
+
+                ArrayList<Integer> conns = getConnections(curr);
+//                System.out.println("Conns: " + conns);
+
+                for (int c : conns) {
+                    if (matrix[level][c].distance > matrix[level - 1][curr].distance + getGraph(curr, c)) {
+                        matrix[level][c] = new Info(curr, matrix[level - 1][curr].distance + getGraph(curr, c));
+                        nextList.add(c);
                     }
+                }
 
-                    if (next>=0) {
+//                printMatrix();
+            }
 
-                        // If this next node has a longer path, update it's parent
-                        if (pathNodes[next].distance > pathNodes[curr].distance + graph[Math.max(curr,next)][Math.min(curr,next)]) {
+            currList = nextList;
+            nextList = new ArrayList<>();
+        }
 
-                            // If it didn't have a parent, we'll add it to the next list
-                            if (pathNodes[next].parent < 0) {
-                                nextList.add(next);
-//                                pathNodes[next].parent = curr;
+        ArrayList<Integer> path = new ArrayList<>();
 
-//                            System.out.println("Added to next: " + j);
-                            }
+        int curr = destination;
+        path.add(destination);
+        for (int level=matrix.length-1; level>=0; level--) {
+            if (matrix[level][curr].pred == path.get(0)) {break;}
+            path.add(0, matrix[level][curr].pred);
+            curr = path.get(0);
+        }
 
-                            pathNodes[next].distance = pathNodes[curr].distance + graph[Math.max(curr,next)][Math.min(curr,next)];
-                            pathNodes[next].parent = curr;
-                        }
+        return path;
+    }
+
+
+    private ArrayList<Integer> getConnections(int num) {
+
+        ArrayList<Integer> ints = new ArrayList<>();
+
+        for (int i=0; i<graph.length; i++) {
+            for (int j=0; j<i; j++){
+                if (graph[i][j]>=0){
+
+                    if (i==num) {
+                        ints.add(j);
+                    }
+                    if (j==num){
+                        ints.add(i);
                     }
                 }
             }
         }
 
-        // For each node, traverse
-        for (int n : nextList) {
-//            System.out.println("Next search: " + n);
-            find(n);
-        }
-
-        return;
+        return ints;
     }
 
-    private class PathNode {
-        int parent;
+    private double getGraph(int i, int j) {
+        return graph[Math.max(i, j)][Math.min(i, j)];
+    }
+
+
+    private void printMatrix() {
+
+        System.out.println("MATRIX:");
+        for (Info [] row : matrix) {
+            for (Info d : row) {
+                System.out.print("("+(d.pred==-1?"_":d.pred)+", "+(d.distance==Double.MAX_VALUE ? "___" : Math.round(d.distance))+")" + "\t");
+            }
+            System.out.print("\n");
+        }
+        System.out.print("\n");
+    }
+
+    private class Info {
+        int pred;
         double distance;
 
-        public PathNode() {
-            parent = -1;
-            distance = Double.MAX_VALUE;
-        }
-
-        public PathNode(int parent, double distance) {
-            this.parent = parent;
+        public Info(int pred, double distance) {
+            this.pred = pred;
             this.distance = distance;
         }
     }
