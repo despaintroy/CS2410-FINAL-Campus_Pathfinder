@@ -13,18 +13,22 @@ public class Weather {
     private final static String LAT = "41.740826";
     private final static String LON = "-111.812780";
     static URL url;
-    private static boolean active;
 
-    static float getTempF() throws CannotGetTempException, WeatherNotActiveException {
+    private static double temperature;
+    private static long lastUpdated; // Time in seconds
 
-        if (!active) {
-            throw new WeatherNotActiveException("Weather has not been activated");
-        }
+    static double getTempF() throws CannotGetTempException {
+        updateTemp();
+        lastUpdated = System.currentTimeMillis()/1000;
+        return temperature;
+    }
+
+    private static void updateTemp() throws CannotGetTempException {
+        System.out.println("Making an API call...");
 
         try {
-
             // Connect to the API
-            url = new URL("https://climacell-microweather-v1.p.rapidapi.com/weather/realtime?unit_system=us&fields=temp&lat="+LAT+"&lon="+LON);
+            url = new URL("https://climacell-microweather-v1.p.rapidapi.com/weather/realtime?unit_system=us&fields=temp&lat=" + LAT + "&lon=" + LON);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
             con.setRequestProperty("x-rapidapi-host", "climacell-microweather-v1.p.rapidapi.com");
@@ -33,10 +37,10 @@ public class Weather {
             // Handle is the server response is not 2xx
             int status = con.getResponseCode();
 
-            if (status/100 != 2) {
+            if (status / 100 != 2) {
                 throw new CannotGetTempException(
                         "Connection status code " + status + " from server is not 2xx.\n" +
-                        "URL = " + url.toString()
+                                "URL = " + url.toString()
                 );
             }
 
@@ -51,10 +55,11 @@ public class Weather {
 
             // Trim the temp out of the string
             String returned = content.toString();
-            String temp = returned.substring(returned.indexOf("value")+7, returned.indexOf("value")+7+4);
+            String temp = returned.substring(returned.indexOf("value") + 7, returned.indexOf("value") + 7 + 4);
 
             con.disconnect();
-            return Float.parseFloat(temp);
+            System.out.println("Complete.");
+            temperature = Float.parseFloat(temp);
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -65,22 +70,8 @@ public class Weather {
         }
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
-    public static void setActive(Boolean b) {
-        active = b;
-    }
-
     static class CannotGetTempException extends Exception {
         public CannotGetTempException(String message) {
-            super(message);
-        }
-    }
-
-    static class WeatherNotActiveException extends Exception {
-        public WeatherNotActiveException(String message) {
             super(message);
         }
     }

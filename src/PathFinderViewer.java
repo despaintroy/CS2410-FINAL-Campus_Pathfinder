@@ -2,6 +2,7 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -10,14 +11,18 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.util.Map;
+import java.util.HashMap;
+
 public class PathFinderViewer extends Application {
 
-    final int TOP_HEIGHT = 30;
+    final int TOP_HEIGHT = 35;
     final int LEFT_WIDTH = 200;
     final int VIEWPORT_HEIGHT = 512;
     final int VIEWPORT_WIDTH = 725;
 
     MapView map = new MapView(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+    CampusBuildings c = new CampusBuildings();
 
     @Override
     public void start(Stage primaryStage) {
@@ -35,65 +40,59 @@ public class PathFinderViewer extends Application {
         primaryStage.show();
     }
 
+
     Pane buildTopPane() {
 
         // Build the top pane
-        Button showPaths = new Button();
+//        Button showPaths = new Button();
         Text tempText = new Text();
-        CheckBox weatherCheckBox = new CheckBox();
 
         HBox topPane = new HBox();
-        topPane.setStyle("-fx-background-color: rgb(50, 75, 100);");
+        topPane.setAlignment(Pos.CENTER_RIGHT);
+        HBox.setMargin(tempText, new Insets(0, 10, 0, 0));
+        topPane.setStyle("-fx-background-color: rgb(30, 50, 80);");
         topPane.setPrefHeight(TOP_HEIGHT);
-        topPane.getChildren().addAll(showPaths, weatherCheckBox, tempText);
+        topPane.getChildren().addAll(tempText);
 
         // Show Paths Button
-        showPaths.setText("Show All Paths");
-        showPaths.setOnAction(e -> {map.showAllPaths();});
-
-        // Checkbox
-        weatherCheckBox.setTextFill(Color.WHITE);
-        weatherCheckBox.setText("Use Weather");
-        weatherCheckBox.setOnAction(e -> {
-
-            if (weatherCheckBox.isSelected()) {
-                Weather.setActive(true);
-                tempText.setText(getWeatherAsString() + "ºF");
-            }
-            else {
-                Weather.setActive(false);
-                tempText.setText(getWeatherAsString());
-            }
-        });
+//        showPaths.setText("Show All Paths");
+//        showPaths.setOnAction(e -> {map.showAllPaths();});
 
         // Temperature readout
         tempText.setFill(Color.WHITE);
         tempText.setFont(Font.font("helvetica", 20));
-        tempText.setText("");
+        try {
+            tempText.setText("Temperature is " + Math.round(Weather.getTempF()) + " ºF");
+        } catch (Weather.CannotGetTempException e) {
+            tempText.setText("Ø");
+        }
 
         return topPane;
     }
 
+
     Pane buildLeftPane() {
 
         // Build left pane
+        VBox leftPane = new VBox();
+        leftPane.setStyle("-fx-background-color: rgb(65, 80, 100);");
+        leftPane.setPrefWidth(LEFT_WIDTH);
+
+        leftPane.setSpacing(0);
+
         Label fromLabel = new Label();
-        Label toLabel = new Label();
         ComboBox<String> buildingFrom = new ComboBox<>();
-        ComboBox<String> buildingTo = new ComboBox<String>();
-        Button submitButton = new Button();
+        Label toLabel = new Label();
+        ComboBox<String> buildingTo = new ComboBox<>();
 
         Label radioLabel = new Label();
         ToggleGroup group = new ToggleGroup();
         RadioButton rb1 = new RadioButton("Shortest Distance");
         RadioButton rb2 = new RadioButton("Indoor Priority");
 
-        VBox leftPane = new VBox();
-        leftPane.setStyle("-fx-background-color: rgb(65, 90, 100);");
-        leftPane.setPrefWidth(LEFT_WIDTH);
+        Button submitButton = new Button();
 
-        leftPane.setSpacing(0);
-
+        // Set spacings between elements
         VBox.setMargin(fromLabel, new Insets(10, 10, 0, 10));
         VBox.setMargin(buildingFrom, new Insets(5, 10, 0, 10));
         VBox.setMargin(toLabel, new Insets(10, 10, 0, 10));
@@ -103,6 +102,7 @@ public class PathFinderViewer extends Application {
         VBox.setMargin(rb2, new Insets(5, 10, 0, 10));
         VBox.setMargin(submitButton, new Insets(20, 10, 0, 10));
 
+        // Make elements take full width
         HBox.setHgrow(buildingFrom, Priority.ALWAYS);
         HBox.setHgrow(buildingTo, Priority.ALWAYS);
         HBox.setHgrow(submitButton, Priority.ALWAYS);
@@ -116,15 +116,13 @@ public class PathFinderViewer extends Application {
         rb1.setMaxWidth(Double.MAX_VALUE);
         rb2.setMaxWidth(Double.MAX_VALUE);
 
-        leftPane.getChildren().addAll(fromLabel, buildingFrom, toLabel, buildingTo, radioLabel, rb1, rb2, submitButton);
-
-        // Dropdown box
         ObservableList<String> options =
                 FXCollections.observableArrayList(
                         "Old Main",
-                        "Life Sciences Building",
-                        "Engineering Building",
-                        "Family Life"
+                        "Life Sciences",
+                        "Engineering",
+                        "Family Life",
+                        "Institute"
                 );
         buildingFrom.setItems(options);
         buildingFrom.setPromptText("Select building");
@@ -146,23 +144,25 @@ public class PathFinderViewer extends Application {
 
         // Submit button
         submitButton.setText("Find Path");
-        submitButton.setOnAction(e -> map.findPath());
+        submitButton.setOnAction(e -> {
+            map.findPath(buildingFrom.getValue(), buildingTo.getValue());
+        });
 
+        leftPane.getChildren().addAll(fromLabel, buildingFrom, toLabel, buildingTo, radioLabel, rb1, rb2, submitButton);
         return leftPane;
     }
+
 
     Pane buildCenterPane(MapView m) {
         return m.getPane();
     }
+
 
     private String getWeatherAsString() {
         try {
             return  "" + Math.round(Weather.getTempF());
         }
         catch (Weather.CannotGetTempException e) {
-            return  "";
-        }
-        catch (Weather.WeatherNotActiveException e) {
             return  "";
         }
     }

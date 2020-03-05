@@ -72,10 +72,15 @@ public class MapView {
         }
     }
 
-    public void findPath() {
+    public void findPath(String from, String to) {
 
-        int start = (int)(Math.random()*810);
-        int end = (int)(Math.random()*810);
+        System.out.println("From (" + from + ") to (" + to + ")");
+
+//        int start = (int)(Math.random()*810);
+//        int end = (int)(Math.random()*810);
+
+        int start = CampusBuildings.buildingNodes.get(from);
+        int end = CampusBuildings.buildingNodes.get(to);
 
         Dijkstra pathFinder = new Dijkstra(mapGraph.adjacency, start, end);
         ArrayList<Integer> bestPath = pathFinder.findPath();
@@ -97,6 +102,7 @@ public class MapView {
 
             Line temp = new Line(x1/SCALE, y1/SCALE, x2/SCALE, y2/SCALE);
             temp.setStroke(Style.edgeColor);
+            temp.setStrokeWidth(2);
             graphPane.getChildren().add(temp);
         }
     }
