@@ -1,3 +1,5 @@
+import javafx.scene.control.CheckBox;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,8 +13,13 @@ public class Weather {
     private final static String LAT = "41.740826";
     private final static String LON = "-111.812780";
     static URL url;
+    private static boolean active;
 
-    static float getTempF() throws CannotGetTempException {
+    static float getTempF() throws CannotGetTempException, WeatherNotActiveException {
+
+        if (!active) {
+            throw new WeatherNotActiveException("Weather has not been activated");
+        }
 
         try {
 
@@ -58,8 +65,22 @@ public class Weather {
         }
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public static void setActive(Boolean b) {
+        active = b;
+    }
+
     static class CannotGetTempException extends Exception {
         public CannotGetTempException(String message) {
+            super(message);
+        }
+    }
+
+    static class WeatherNotActiveException extends Exception {
+        public WeatherNotActiveException(String message) {
             super(message);
         }
     }

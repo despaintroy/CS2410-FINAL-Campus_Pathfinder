@@ -1,9 +1,9 @@
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -22,8 +22,6 @@ public class PathFinderViewer extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        System.out.println("Constructing panes...");
-
         BorderPane myPane = new BorderPane();
 
         myPane.setLeft(buildLeftPane());
@@ -38,31 +36,89 @@ public class PathFinderViewer extends Application {
     }
 
     Pane buildTopPane() {
-        HBox horizontal = new HBox();
-        StackPane stack = new StackPane();
 
+        // Build the top pane
+        Button showPaths = new Button();
         Text tempText = new Text();
+        CheckBox weatherCheckBox = new CheckBox();
+
+        HBox topPane = new HBox();
+        topPane.setStyle("-fx-background-color: rgb(50, 75, 100);");
+        topPane.setPrefHeight(TOP_HEIGHT);
+        topPane.getChildren().addAll(showPaths, weatherCheckBox, tempText);
+
+        // Show Paths Button
+        showPaths.setText("Show All Paths");
+        showPaths.setOnAction(e -> {map.showAllPaths();});
+
+        // Checkbox
+        weatherCheckBox.setTextFill(Color.WHITE);
+        weatherCheckBox.setText("Use Weather");
+        weatherCheckBox.setOnAction(e -> {
+
+            if (weatherCheckBox.isSelected()) {
+                Weather.setActive(true);
+                tempText.setText(getWeatherAsString() + "ºF");
+            }
+            else {
+                Weather.setActive(false);
+                tempText.setText(getWeatherAsString());
+            }
+        });
+
+        // Temperature readout
         tempText.setFill(Color.WHITE);
         tempText.setFont(Font.font("helvetica", 20));
+        tempText.setText("");
 
-        try {
-            tempText.setText("Temperature: " + Math.round(Weather.getTempF()) + "℉");
-        }
-        catch (Weather.CannotGetTempException e) {
-            tempText.setText("Temperature: ");
-        }
-//        tempText.setText("Temperature: " + 0 + "℉");
-
-        horizontal.getChildren().addAll(tempText);
-
-        stack.setStyle("-fx-background-color: rgb(50, 75, 100);");
-        stack.setPrefHeight(TOP_HEIGHT);
-        stack.getChildren().addAll(horizontal);
-
-        return stack;
+        return topPane;
     }
 
     Pane buildLeftPane() {
+
+        // Build left pane
+        Label fromLabel = new Label();
+        Label toLabel = new Label();
+        ComboBox<String> buildingFrom = new ComboBox<>();
+        ComboBox<String> buildingTo = new ComboBox<String>();
+        Button submitButton = new Button();
+
+        Label radioLabel = new Label();
+        ToggleGroup group = new ToggleGroup();
+        RadioButton rb1 = new RadioButton("Shortest Distance");
+        RadioButton rb2 = new RadioButton("Indoor Priority");
+
+        VBox leftPane = new VBox();
+        leftPane.setStyle("-fx-background-color: rgb(65, 90, 100);");
+        leftPane.setPrefWidth(LEFT_WIDTH);
+
+        leftPane.setSpacing(0);
+
+        VBox.setMargin(fromLabel, new Insets(10, 10, 0, 10));
+        VBox.setMargin(buildingFrom, new Insets(5, 10, 0, 10));
+        VBox.setMargin(toLabel, new Insets(10, 10, 0, 10));
+        VBox.setMargin(buildingTo, new Insets(5, 10, 0, 10));
+        VBox.setMargin(radioLabel, new Insets(20, 10, 0, 10));
+        VBox.setMargin(rb1, new Insets(5, 10, 0, 10));
+        VBox.setMargin(rb2, new Insets(5, 10, 0, 10));
+        VBox.setMargin(submitButton, new Insets(20, 10, 0, 10));
+
+        HBox.setHgrow(buildingFrom, Priority.ALWAYS);
+        HBox.setHgrow(buildingTo, Priority.ALWAYS);
+        HBox.setHgrow(submitButton, Priority.ALWAYS);
+        HBox.setHgrow(radioLabel, Priority.ALWAYS);
+        HBox.setHgrow(rb1, Priority.ALWAYS);
+        HBox.setHgrow(rb2, Priority.ALWAYS);
+        buildingFrom.setMaxWidth(Double.MAX_VALUE);
+        buildingTo.setMaxWidth(Double.MAX_VALUE);
+        submitButton.setMaxWidth(Double.MAX_VALUE);
+        radioLabel.setMaxWidth(Double.MAX_VALUE);
+        rb1.setMaxWidth(Double.MAX_VALUE);
+        rb2.setMaxWidth(Double.MAX_VALUE);
+
+        leftPane.getChildren().addAll(fromLabel, buildingFrom, toLabel, buildingTo, radioLabel, rb1, rb2, submitButton);
+
+        // Dropdown box
         ObservableList<String> options =
                 FXCollections.observableArrayList(
                         "Old Main",
@@ -70,65 +126,44 @@ public class PathFinderViewer extends Application {
                         "Engineering Building",
                         "Family Life"
                 );
-        final ComboBox buildingChoice = new ComboBox(options);
-        final Button submitButton = new Button("Find Path");
+        buildingFrom.setItems(options);
+        buildingFrom.setPromptText("Select building");
+        buildingTo.setItems(options);
+        buildingTo.setPromptText("Select building");
+        fromLabel.setText("From:");
+        fromLabel.setTextFill(Color.WHITE);
+        toLabel.setText("To:");
+        toLabel.setTextFill(Color.WHITE);
+
+        // Radio Buttons
+        radioLabel.setTextFill(Color.WHITE);
+        radioLabel.setText("Pathfinding Method:");
+        rb1.setToggleGroup(group);
+        rb1.setTextFill(Color.WHITE);
+        rb1.setSelected(true);
+        rb2.setToggleGroup(group);
+        rb2.setTextFill(Color.WHITE);
+
+        // Submit button
+        submitButton.setText("Find Path");
         submitButton.setOnAction(e -> map.findPath());
 
-        VBox pane = new VBox();
-        pane.getChildren().addAll(buildingChoice, submitButton);
-        pane.setStyle("-fx-background-color: rgb(65, 90, 100);");
-        pane.setPrefWidth(LEFT_WIDTH);
-        return pane;
+        return leftPane;
     }
 
     Pane buildCenterPane(MapView m) {
+        return m.getPane();
+    }
 
-        return m.viewPane;
-
-//        Graph newGraph = new Graph("savedNodes.txt", "savedEdges.txt");
-//
-////        System.out.println(newGraph);
-//
-//        StackPane stack = new StackPane();
-//        Pane graph = new Pane();
-//
-//        try {
-//            FileInputStream inputstream = new FileInputStream("campus_map.png");
-//            Image image = new Image(inputstream);
-//            ImageView iv1 = new ImageView();
-//            iv1.setImage(image);
-//            iv1.setFitWidth(VIEWPORT_WIDTH);
-//            iv1.setFitHeight(VIEWPORT_HEIGHT);
-//            stack.getChildren().addAll(iv1);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//
-//        float [][] nodeCoords = newGraph.getNodeCoords();
-//        ArrayList<Float[]> edgeCoords = newGraph.getEdgeCoords();
-//
-//        for (float[] coord : nodeCoords) {
-//
-//            float x = coord[0];
-//            float y = coord[1];
-//
-//            Circle temp = new Circle(x/SCALE, y/SCALE,2, Style.nodeColor);
-//            graph.getChildren().add(temp);
-//        }
-//
-//        for (Float[] coords : edgeCoords) {
-//            float x1 = coords[0];
-//            float y1 = coords[1];
-//            float x2 = coords[2];
-//            float y2 = coords[3];
-//
-//            Line temp = new Line(x1/SCALE, y1/SCALE, x2/SCALE, y2/SCALE);
-//            temp.setStroke(Style.edgeColor);
-//            graph.getChildren().add(temp);
-//        }
-//
-//        stack.getChildren().add(graph);
-//
-//        return stack;
+    private String getWeatherAsString() {
+        try {
+            return  "" + Math.round(Weather.getTempF());
+        }
+        catch (Weather.CannotGetTempException e) {
+            return  "";
+        }
+        catch (Weather.WeatherNotActiveException e) {
+            return  "";
+        }
     }
 }
