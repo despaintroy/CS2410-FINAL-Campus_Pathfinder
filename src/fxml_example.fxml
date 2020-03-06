@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<?import javafx.scene.Group?>
+<BorderPane fx:controller="FXMLExampleController"
+            xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2"
+            styleClass="root">
+
+    <top>
+        <HBox id="top-bar" fx:id="topBar" alignment="CENTER_RIGHT">
+            <Text id="temp-readout" fx:id="tempReadout">Current Temperature</Text>
+        </HBox>
+    </top>
+
+    <left>
+        <VBox id="left-bar" fx:id="leftBar" alignment="TOP_LEFT">
+
+            <Label styleClass="vform-label">From:</Label>
+            <ComboBox styleClass="vform-combo" fx:id="buildingFrom" id="building-from" promptText="Choose building" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Old Main"/>
+                        <String fx:value="Life Sciences"/>
+                        <String fx:value="Engineering"/>
+                        <String fx:value="Family Life"/>
+                        <String fx:value="Institute"/>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+
+            <Label styleClass="vform-label">To:</Label>
+            <ComboBox styleClass="vform-combo" fx:id="buildingTo" id="building-to" promptText="Choose building" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Old Main"/>
+                        <String fx:value="Life Sciences"/>
+                        <String fx:value="Engineering"/>
+                        <String fx:value="Family Life"/>
+                        <String fx:value="Institute"/>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+
+            <Label styleClass="vform-spacer"/>
+
+            <Button styleClass="vform-submit" fx:id="findPathSubmit" onAction="#findPathSubmit" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                Find Path
+            </Button>
+
+        </VBox>
+    </left>
+
+    <center>
+        <Pane id="center-pane" fx:id="centerPane"/>
+    </center>
+
+    <stylesheets>
+        <URL value="@FXMLExample.css" />
+    </stylesheets>
+
+</BorderPane>
+
+
+<!--<GridPane fx:controller="FXMLExampleController"-->
+<!--          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10"-->
+<!--          styleClass="root">-->
+<!--    <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>-->
+
+<!--    <Text id="welcome-text" text="Welcome"-->
+<!--          GridPane.columnIndex="0" GridPane.rowIndex="0"-->
+<!--          GridPane.columnSpan="2"/>-->
+
+<!--    <Label text="User Name:"-->
+<!--           GridPane.columnIndex="0" GridPane.rowIndex="1"/>-->
+
+<!--    <TextField-->
+<!--            GridPane.columnIndex="1" GridPane.rowIndex="1"/>-->
+
+<!--    <Label text="Password:"-->
+<!--           GridPane.columnIndex="0" GridPane.rowIndex="2"/>-->
+
+<!--    <PasswordField fx:id="passwordField"-->
+<!--                   GridPane.columnIndex="1" GridPane.rowIndex="2"/>-->
+
+<!--    <HBox spacing="10" alignment="bottom_right"-->
+<!--          GridPane.columnIndex="1" GridPane.rowIndex="4">-->
+<!--        <Button text="Sign In"-->
+<!--                onAction="#handleSubmitButtonAction"/>-->
+<!--    </HBox>-->
+
+<!--    <Text fx:id="actiontarget"-->
+<!--          GridPane.columnIndex="1" GridPane.rowIndex="6"/>-->
+
+<!--    <stylesheets>-->
+<!--        <URL value="@FXMLExample.css" />-->
+<!--    </stylesheets>-->
+
+<!--</GridPane>-->
