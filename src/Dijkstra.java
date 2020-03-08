@@ -1,6 +1,4 @@
-import javax.sound.midi.Soundbank;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Dijkstra {
 
@@ -8,6 +6,7 @@ public class Dijkstra {
     Info [][] matrix;
     int start;
     int destination;
+
 
     public Dijkstra(double[][] graph, int start, int destination) {
 
@@ -24,6 +23,7 @@ public class Dijkstra {
         }
     }
 
+
     public ArrayList<Integer> findPath() {
 
         ArrayList<Integer> currList = new ArrayList<>();
@@ -33,18 +33,13 @@ public class Dijkstra {
 
         matrix[0][start] = new Info(start, 0);
 
-//        printMatrix();
-
         for (int level=1; level<matrix.length; level++) {
 
             matrix[level] = matrix[level - 1].clone();
 
-//            printMatrix();
-
             for (int curr : currList) {
 
                 ArrayList<Integer> conns = getConnections(curr);
-//                System.out.println("Conns: " + conns);
 
                 for (int c : conns) {
                     if (matrix[level][c].distance > matrix[level - 1][curr].distance + getGraph(curr, c)) {
@@ -52,8 +47,6 @@ public class Dijkstra {
                         nextList.add(c);
                     }
                 }
-
-//                printMatrix();
             }
 
             currList = nextList;
@@ -95,6 +88,7 @@ public class Dijkstra {
         return ints;
     }
 
+
     private double getGraph(int i, int j) {
         return graph[Math.max(i, j)][Math.min(i, j)];
     }
@@ -111,6 +105,7 @@ public class Dijkstra {
         }
         System.out.print("\n");
     }
+
 
     private class Info {
         int pred;
