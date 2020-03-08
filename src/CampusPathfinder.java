@@ -4,23 +4,23 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class FXMLExample extends Application {
+public class CampusPathfinder extends Application {
 
     public static void main(String[] args) {
-        Application.launch(FXMLExample.class, args);
+        Application.launch(CampusPathfinder.class, args);
     }
 
     @Override
     public void start(Stage stage) throws Exception {
 
-        Parent root = FXMLLoader.load(getClass().getResource("fxml_example.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("CampusPathfinder.fxml"));
         Scene scene = new Scene(root);
 
         // Get the width/height of different elements from the
-        double topHeight = FXMLExampleController.TOP_HEIGHT;
-        double leftWidth = FXMLExampleController.LEFT_WIDTH;
-        double viewportWidth = FXMLExampleController.VIEWPORT_WIDTH;
-        double viewportHeight = FXMLExampleController.VIEWPORT_HEIGHT;
+        double topHeight = CampusPathfinderController.TOP_HEIGHT;
+        double leftWidth = CampusPathfinderController.LEFT_WIDTH;
+        double viewportWidth = CampusPathfinderController.VIEWPORT_WIDTH;
+        double viewportHeight = CampusPathfinderController.VIEWPORT_HEIGHT;
 
         stage.setTitle("Campus Pathfinder");
         stage.setScene(scene);

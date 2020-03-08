@@ -1,3 +1,4 @@
+import com.CampusGraph.Buildings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -6,7 +7,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class FXMLExampleController {
+public class CampusPathfinderController {
 
     private MapView map;
     static final int TOP_HEIGHT        = 35;
@@ -26,14 +27,15 @@ public class FXMLExampleController {
     @FXML
     public void findPathSubmit() {
         map.findPath(buildingFrom.getValue().toString(), buildingTo.getValue().toString());
-        centerPane = map.getPane();
+        centerPane = map.getMasterPane();
     }
 
     @FXML
     public void initialize() {
 
-        new CampusBuildings();
+        new Buildings();
 
+        // Set the dimensions of the viewport
         topBar.setPrefHeight(TOP_HEIGHT);
         leftBar.setPrefWidth(LEFT_WIDTH);
 
@@ -47,6 +49,6 @@ public class FXMLExampleController {
 
         map = new MapView(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
         map.showAllPaths();
-        centerPane.getChildren().setAll(map.getPane());
+        centerPane.getChildren().setAll(map.getMasterPane());
     }
 }
