@@ -1,12 +1,15 @@
+package com.CampusGraph;
+
 import java.util.Hashtable;
 import java.util.Map;
 
-public class CampusBuildings {
+public class Buildings {
 
-    static Map<String, String> buildings = new Hashtable<>();
-    static Map<String, Integer> buildingNodes = new Hashtable<>();
+    // TODO: Need to make these private
+    public static Map<String, String> buildings = new Hashtable<>();
+    public static Map<String, Integer> buildingNodes = new Hashtable<>();
 
-    CampusBuildings() {
+    public Buildings() {
         buildingNodes.put("Life Sciences", 438);
         buildingNodes.put("Old Main", 37);
         buildingNodes.put("Engineering", 345);
