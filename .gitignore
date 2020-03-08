@@ -1,5 +1,4 @@
 *.jar
 /out/
 /.idea/
-*.png
 *.iml
