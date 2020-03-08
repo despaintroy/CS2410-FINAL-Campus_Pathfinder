@@ -1,7 +1,10 @@
+package com.CampusGraph;
+
 public class Node {
 
-    double x;
-    double y;
+    // TODO: Need to make these private
+    public double x;
+    public double y;
 
     Node (double x, double y) {
         this.x = x;
