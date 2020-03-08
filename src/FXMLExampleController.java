@@ -1,6 +1,3 @@
-//package fxmlexample;
-
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -11,7 +8,7 @@ import javafx.scene.text.Text;
 
 public class FXMLExampleController {
 
-    MapView map;
+    private MapView map;
     static final int TOP_HEIGHT        = 35;
     static final int LEFT_WIDTH        = 180;
     static final int VIEWPORT_WIDTH    = 725;
