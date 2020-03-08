@@ -11,8 +11,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.util.Map;
-import java.util.HashMap;
+
+/*
+TODO: Slider to control how to prioritize going inside.
+TODO: Loading bar for how complete the algorithm it.
+TODO: Select your own nodes of where to go to/from
+TODO: Cache all possible paths and load into memory. Then update paths in real time when moving mouse around the screen.
+ */
 
 public class PathFinderViewer extends Application {
 
