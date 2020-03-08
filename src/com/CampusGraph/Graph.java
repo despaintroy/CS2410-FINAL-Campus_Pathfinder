@@ -1,15 +1,10 @@
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
+package com.CampusGraph;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.Scanner;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -19,14 +14,16 @@ import org.json.simple.parser.ParseException;
 
 public class Graph {
 
-    double [][] adjacency;
-    ArrayList<Node> nodes;
-    boolean [][] edges;
+    // TODO: Need to make these private
+    public double [][] adjacency;
+    public ArrayList<Node> nodes;
+    private boolean [][] edges;
 
-    Graph(String nodesFile, String edgesFile) {
+    public Graph(String nodesFile, String edgesFile) {
 
         nodes = new ArrayList<>();
 
+        // Read nodes from file
         try {
             Object obj = new JSONParser().parse(new FileReader(nodesFile));
             JSONArray ja = (JSONArray) obj;
@@ -44,21 +41,6 @@ public class Graph {
             e.printStackTrace();
         }
 
-
-        // Read the nodes from file
-//        try {
-//            Scanner inFile = new Scanner(new File(nodesFile));
-//            while (inFile.hasNextLine()) {
-//                String line = inFile.nextLine();
-//                String [] coords = line.split(" ");
-//                float x = Float.parseFloat(coords[0]);
-//                float y = Float.parseFloat(coords[1]);
-//                nodes.add(new Node(x, y));
-//            }
-//            inFile.close();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
 
         // Read the edges from file
         edges = new boolean[nodes.size()][nodes.size()];
@@ -94,28 +76,6 @@ public class Graph {
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
-
-//        try {
-//            Scanner inFile = new Scanner(new File(edgesFile));
-//            for (int i=0; inFile.hasNextLine(); i++) {
-//                String line = inFile.nextLine();
-//                String [] inSplit = line.split(" ");
-//                for (int j=0; j<=i; j++) {
-//                    if (inSplit[j].equals("1")) {
-//                        edges[i][j] = true;
-//
-//                        // Create the adjacency matrix
-//                        double [] p1 = {nodes.get(i).x, nodes.get(i).y};
-//                        double [] p2 = {nodes.get(j).x, nodes.get(j).y};
-//                        adjacency[i][j] = dist(p1, p2);
-//                    }
-//                 }
-//            }
-//            inFile.close();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-
     }
 
     @Override
