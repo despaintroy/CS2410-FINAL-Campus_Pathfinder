@@ -68,6 +68,33 @@ public class Graph {
             Arrays.fill(line, -1);
         }
 
+        try {
+            Object obj = new JSONParser().parse(new FileReader(edgesFile));
+            JSONArray ja = (JSONArray) obj;
+
+            Iterator itr2 = ja.iterator();
+
+            while (itr2.hasNext()) {
+                JSONObject node = (JSONObject) itr2.next();
+                int n1 = Integer.parseInt(node.get("n1").toString());
+                int n2 = Integer.parseInt(node.get("n2").toString());
+                boolean active = Boolean.parseBoolean(node.get("active").toString());
+
+                if (active) {
+                    edges[n1][n2] = true;
+
+                    // Create the adjacency matrix
+                    double [] p1 = {nodes.get(n1).x, nodes.get(n1).y};
+                    double [] p2 = {nodes.get(n2).x, nodes.get(n2).y};
+                    adjacency[n1][n2] = dist(p1, p2);
+                }
+
+            }
+
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+
 //        try {
 //            Scanner inFile = new Scanner(new File(edgesFile));
 //            for (int i=0; inFile.hasNextLine(); i++) {
