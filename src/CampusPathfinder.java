@@ -6,6 +6,8 @@ import javafx.stage.Stage;
 
 public class CampusPathfinder extends Application {
 
+//    TODO: Maven dependancies to deal with that JSON library
+
     public static void main(String[] args) {
         Application.launch(CampusPathfinder.class, args);
     }
