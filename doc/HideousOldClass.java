@@ -1,3 +1,5 @@
+package depricated;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,7 +29,7 @@ public class PathFinderViewer extends Application {
     final int VIEWPORT_WIDTH = 725;
 
     MapView map = new MapView(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
-    CampusBuildings c = new CampusBuildings();
+    Buildings c = new Buildings();
 
     @Override
     public void start(Stage primaryStage) {
