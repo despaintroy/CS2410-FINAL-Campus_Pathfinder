@@ -1,7 +1,11 @@
+import com.CampusGraph.Buildings;
+import com.CampusGraph.Dijkstra;
+import com.CampusGraph.Graph;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
@@ -11,53 +15,59 @@ import java.util.ArrayList;
 
 public class MapView {
 
-    final double SCALE = 1.93;
-    final int VIEWPORT_WIDTH;
-    final int VIEWPORT_HEIGHT;
+    private final String EDGES_FILEPATH = "data/edges.json";
+    private final String NODES_FILEPATH = "data/nodes.json";
+    private final String MAP_FILEPATH = "data/campus_map.png";
+    private final Color PATH_COLOR = Color.NAVY;
 
-    Pane mapPane;
-    Pane graphPane;
-    Graph mapGraph;
+    private final double SCALE = 1.93;
 
-    public MapView(int viewport_width, int viewport_height) {
+    private Pane masterPane;
+    private Pane graphPane;
+    private Graph graph;
 
-        VIEWPORT_WIDTH = viewport_width;
-        VIEWPORT_HEIGHT = viewport_height;
+    /**
+     * Initializes a MapView with just an image to display for  tbe background.
+     *
+     * @param viewport_width
+     * @param viewport_height
+     */
+    MapView(int viewport_width, int viewport_height) {
 
-//        mapGraph = new Graph("savedNodes.txt", "savedEdges.txt");
-        mapGraph = new Graph("nodes.json", "edges.json");
+        graph = new Graph(NODES_FILEPATH, EDGES_FILEPATH);
 
-        mapPane = new StackPane();
+        masterPane = new StackPane();
         graphPane = new Pane();
         ImageView iv = new ImageView();
 
+        // Load the map background
         try {
-            FileInputStream inStream = new FileInputStream("campus_map.png");
-            Image image = new Image(inStream);
+            FileInputStream imageIn = new FileInputStream(MAP_FILEPATH);
+            Image image = new Image(imageIn);
             iv.setImage(image);
-            iv.setFitWidth(VIEWPORT_WIDTH);
-            iv.setFitHeight(VIEWPORT_HEIGHT);
+            iv.setFitWidth(viewport_width);
+            iv.setFitHeight(viewport_height);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
-        mapPane.getChildren().addAll(iv, graphPane);
+        masterPane.getChildren().addAll(iv, graphPane);
     }
 
 
-    public void showAllPaths() {
+    void showAllPaths() {
 
         graphPane.getChildren().clear();
 
-        double [][] nodeCoords = mapGraph.getNodeCoords();
-        ArrayList<Double[]> edgeCoords = mapGraph.getEdgeCoords();
+        double [][] nodeCoords = graph.getNodeCoords();
+        ArrayList<Double[]> edgeCoords = graph.getEdgeCoords();
 
         for (double[] coord : nodeCoords) {
 
             double x = coord[0];
             double y = coord[1];
 
-            Circle temp = new Circle(x/SCALE, y/SCALE,2, Style.nodeColor);
+            Circle temp = new Circle(x/SCALE, y/SCALE,2, PATH_COLOR);
             graphPane.getChildren().add(temp);
         }
 
@@ -68,7 +78,7 @@ public class MapView {
             double y2 = coords[3];
 
             Line temp = new Line(x1/SCALE, y1/SCALE, x2/SCALE, y2/SCALE);
-            temp.setStroke(Style.edgeColor);
+            temp.setStroke(PATH_COLOR);
             graphPane.getChildren().add(temp);
         }
     }
@@ -80,15 +90,16 @@ public class MapView {
 //        int start = (int)(Math.random()*810);
 //        int end = (int)(Math.random()*810);
 
-        int start = CampusBuildings.buildingNodes.get(from);
-        int end = CampusBuildings.buildingNodes.get(to);
+        int start = Buildings.buildingNodes.get(from);
+        int end = Buildings.buildingNodes.get(to);
 
-        Dijkstra pathFinder = new Dijkstra(mapGraph.adjacency, start, end);
+        // TODO: Call the pathfinding through the Graph class instead
+        Dijkstra pathFinder = new Dijkstra(graph.adjacency, start, end);
         ArrayList<Integer> bestPath = pathFinder.findPath();
 
         // Mark with circles the endpoints
-        Circle startCircle = new Circle(mapGraph.nodes.get(start).x/SCALE, mapGraph.nodes.get(start).y/SCALE, 5 , Style.edgeColor);
-        Circle endCircle = new Circle(mapGraph.nodes.get(end).x/SCALE, mapGraph.nodes.get(end).y/SCALE, 5 , Style.edgeColor);
+        Circle startCircle = new Circle(graph.nodes.get(start).x/SCALE, graph.nodes.get(start).y/SCALE, 5 , PATH_COLOR);
+        Circle endCircle = new Circle(graph.nodes.get(end).x/SCALE, graph.nodes.get(end).y/SCALE, 5 , PATH_COLOR);
 
         graphPane.getChildren().clear();
         graphPane.getChildren().addAll(startCircle, endCircle);
@@ -96,19 +107,19 @@ public class MapView {
         for (int i=0; i<bestPath.size()-1; i++) {
 
             // Draw the new path
-            double x1 = mapGraph.nodes.get(bestPath.get(i)).x;
-            double y1 = mapGraph.nodes.get(bestPath.get(i)).y;
-            double x2 = mapGraph.nodes.get(bestPath.get(i+1)).x;
-            double y2 = mapGraph.nodes.get(bestPath.get(i+1)).y;
+            double x1 = graph.nodes.get(bestPath.get(i)).x;
+            double y1 = graph.nodes.get(bestPath.get(i)).y;
+            double x2 = graph.nodes.get(bestPath.get(i+1)).x;
+            double y2 = graph.nodes.get(bestPath.get(i+1)).y;
 
             Line temp = new Line(x1/SCALE, y1/SCALE, x2/SCALE, y2/SCALE);
-            temp.setStroke(Style.edgeColor);
+            temp.setStroke(PATH_COLOR);
             temp.setStrokeWidth(2);
             graphPane.getChildren().add(temp);
         }
     }
 
-    public Pane getPane() {
-        return mapPane;
+    public Pane getMasterPane() {
+        return masterPane;
     }
 }
