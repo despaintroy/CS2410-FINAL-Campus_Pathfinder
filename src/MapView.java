@@ -24,7 +24,8 @@ public class MapView {
         VIEWPORT_WIDTH = viewport_width;
         VIEWPORT_HEIGHT = viewport_height;
 
-        mapGraph = new Graph("savedNodes.txt", "savedEdges.txt");
+//        mapGraph = new Graph("savedNodes.txt", "savedEdges.txt");
+        mapGraph = new Graph("nodes.json", "edges.json");
 
         mapPane = new StackPane();
         graphPane = new Pane();
@@ -48,23 +49,23 @@ public class MapView {
 
         graphPane.getChildren().clear();
 
-        float [][] nodeCoords = mapGraph.getNodeCoords();
-        ArrayList<Float[]> edgeCoords = mapGraph.getEdgeCoords();
+        double [][] nodeCoords = mapGraph.getNodeCoords();
+        ArrayList<Double[]> edgeCoords = mapGraph.getEdgeCoords();
 
-        for (float[] coord : nodeCoords) {
+        for (double[] coord : nodeCoords) {
 
-            float x = coord[0];
-            float y = coord[1];
+            double x = coord[0];
+            double y = coord[1];
 
             Circle temp = new Circle(x/SCALE, y/SCALE,2, Style.nodeColor);
             graphPane.getChildren().add(temp);
         }
 
-        for (Float[] coords : edgeCoords) {
-            float x1 = coords[0];
-            float y1 = coords[1];
-            float x2 = coords[2];
-            float y2 = coords[3];
+        for (Double[] coords : edgeCoords) {
+            double x1 = coords[0];
+            double y1 = coords[1];
+            double x2 = coords[2];
+            double y2 = coords[3];
 
             Line temp = new Line(x1/SCALE, y1/SCALE, x2/SCALE, y2/SCALE);
             temp.setStroke(Style.edgeColor);
@@ -95,10 +96,10 @@ public class MapView {
         for (int i=0; i<bestPath.size()-1; i++) {
 
             // Draw the new path
-            float x1 = mapGraph.nodes.get(bestPath.get(i)).x;
-            float y1 = mapGraph.nodes.get(bestPath.get(i)).y;
-            float x2 = mapGraph.nodes.get(bestPath.get(i+1)).x;
-            float y2 = mapGraph.nodes.get(bestPath.get(i+1)).y;
+            double x1 = mapGraph.nodes.get(bestPath.get(i)).x;
+            double y1 = mapGraph.nodes.get(bestPath.get(i)).y;
+            double x2 = mapGraph.nodes.get(bestPath.get(i+1)).x;
+            double y2 = mapGraph.nodes.get(bestPath.get(i+1)).y;
 
             Line temp = new Line(x1/SCALE, y1/SCALE, x2/SCALE, y2/SCALE);
             temp.setStroke(Style.edgeColor);

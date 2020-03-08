@@ -1,9 +1,9 @@
 public class Node {
 
-    float x;
-    float y;
+    double x;
+    double y;
 
-    Node (float x, float y) {
+    Node (double x, double y) {
         this.x = x;
         this.y = y;
     }

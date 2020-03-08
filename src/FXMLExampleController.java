@@ -37,16 +37,16 @@ public class FXMLExampleController {
         topBar.setPrefHeight(TOP_HEIGHT);
         leftBar.setPrefWidth(LEFT_WIDTH);
 
-        try {
-            tempReadout.setText("Temperature is " + Math.round(Weather.getTempF()) + " ºF");
-        } catch (Weather.CannotGetTempException e) {
-            tempReadout.setText("Temperature is -- ºF");
-            e.printStackTrace();
-        }
-//        tempReadout.setText("Temperature is -- ºF");
+//        try {
+//            tempReadout.setText("Temperature is " + Math.round(Weather.getTempF()) + " ºF");
+//        } catch (Weather.CannotGetTempException e) {
+//            tempReadout.setText("Temperature is -- ºF");
+//            e.printStackTrace();
+//        }
+        tempReadout.setText("Temperature is -- ºF");
 
         map = new MapView(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
-//        map.showAllPaths();
+        map.showAllPaths();
         centerPane.getChildren().setAll(map.getPane());
     }
 }
