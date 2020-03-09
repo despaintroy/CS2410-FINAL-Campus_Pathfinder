@@ -26,7 +26,7 @@ public class CampusPathfinderController {
 
     @FXML
     public void findPathSubmit() {
-        map.findPath(buildingFrom.getValue().toString(), buildingTo.getValue().toString());
+        map.drawShortestPath(buildingFrom.getValue().toString(), buildingTo.getValue().toString());
         centerPane = map.getMasterPane();
     }
 

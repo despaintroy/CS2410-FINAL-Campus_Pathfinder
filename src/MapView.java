@@ -1,5 +1,4 @@
 import com.CampusGraph.Buildings;
-import com.CampusGraph.Dijkstra;
 import com.CampusGraph.Graph;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,7 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-public class MapView {
+class MapView {
 
     private final String EDGES_FILEPATH = "data/edges.json";
     private final String NODES_FILEPATH = "data/nodes.json";
@@ -29,8 +28,8 @@ public class MapView {
     /**
      * Initializes a MapView with just an image to display for  tbe background.
      *
-     * @param viewport_width
-     * @param viewport_height
+     * @param viewport_width width of pane to create
+     * @param viewport_height height of pane to create
      */
     MapView(int viewport_width, int viewport_height) {
 
@@ -55,6 +54,9 @@ public class MapView {
     }
 
 
+    /**
+     * Draw all paths and nodes from the graph
+     */
     void showAllPaths() {
 
         graphPane.getChildren().clear();
@@ -83,7 +85,14 @@ public class MapView {
         }
     }
 
-    public void findPath(String from, String to) {
+
+    /**
+     * Draw the shortest path between two nodes
+     *
+     * @param from building name to start from
+     * @param to building name to end at
+     */
+    void drawShortestPath(String from, String to) {
 
         System.out.println("From (" + from + ") to (" + to + ")");
 
@@ -96,9 +105,10 @@ public class MapView {
         Circle startCircle = new Circle(graph.nodes.get(start).x/SCALE, graph.nodes.get(start).y/SCALE, 5 , PATH_COLOR);
         Circle endCircle = new Circle(graph.nodes.get(end).x/SCALE, graph.nodes.get(end).y/SCALE, 5 , PATH_COLOR);
 
+        // Clear any existing graph from off the pane
         graphPane.getChildren().clear();
-        graphPane.getChildren().addAll(startCircle, endCircle);
 
+        // Draw the path onto the pane
         for (int i=0; i<bestPath.size()-1; i++) {
 
             // Draw the new path
@@ -112,9 +122,17 @@ public class MapView {
             temp.setStrokeWidth(2);
             graphPane.getChildren().add(temp);
         }
+
+        graphPane.getChildren().addAll(startCircle, endCircle);
     }
 
-    public Pane getMasterPane() {
+
+    /**
+     * Gets the pane with the map drawn on it
+     *
+     * @return the constructed pane
+     */
+    Pane getMasterPane() {
         return masterPane;
     }
 }
