@@ -147,7 +147,7 @@ class Dijkstra {
         int pred;
         double distance;
 
-        public Info(int pred, double distance) {
+        Info(int pred, double distance) {
             this.pred = pred;
             this.distance = distance;
         }
