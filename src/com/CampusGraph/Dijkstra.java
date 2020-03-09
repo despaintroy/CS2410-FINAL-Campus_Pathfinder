@@ -2,14 +2,22 @@ package com.CampusGraph;
 
 import java.util.ArrayList;
 
-public class Dijkstra {
+class Dijkstra {
 
     private double [][] adjacency;  // Adjacency matrix that holds distances between nodes
-    private Info [][] matrix;   // 2D Array of Info objects for running Dijkstra's algorithm
-    private int start;          // ID of the starting node
-    private int destination;    // ID of the destination node
+    private Info [][] matrix;       // 2D Array of Info objects for running Dijkstra's algorithm
+    private int start;              // ID of the starting node
+    private int destination;        // ID of the destination node
 
 
+    /**
+     * Constructor
+     *
+     * @param graph Adjacency matrix to use
+     * @param start Index of the start node
+     * @param destination Index of the end node
+     *                    .
+     */
     Dijkstra(double[][] graph, int start, int destination) {
 
         this.adjacency = graph;
@@ -27,6 +35,12 @@ public class Dijkstra {
     }
 
     // TODO: I think we can do this using only one level...lets try that. We just need to quit when nextList is empty
+
+    /**
+     * Finds the shortest path between two nodes
+     *
+     * @return List of integers representing the points along the way
+     */
     ArrayList<Integer> findPath() {
 
         ArrayList<Integer> currList = new ArrayList<>();    // List of all nodes working on in the current level
