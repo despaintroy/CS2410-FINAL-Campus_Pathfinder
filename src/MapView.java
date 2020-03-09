@@ -93,9 +93,7 @@ public class MapView {
         int start = Buildings.buildingNodes.get(from);
         int end = Buildings.buildingNodes.get(to);
 
-        // TODO: Call the pathfinding through the Graph class instead
-        Dijkstra pathFinder = new Dijkstra(graph.adjacency, start, end);
-        ArrayList<Integer> bestPath = pathFinder.findPath();
+        ArrayList<Integer> bestPath = graph.findPath(start, end);
 
         // Mark with circles the endpoints
         Circle startCircle = new Circle(graph.nodes.get(start).x/SCALE, graph.nodes.get(start).y/SCALE, 5 , PATH_COLOR);

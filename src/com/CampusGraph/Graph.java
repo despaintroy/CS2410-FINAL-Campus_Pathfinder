@@ -134,8 +134,17 @@ public class Graph {
         return temp;
     }
 
-    void findPath() {
-        return;
+
+    /**
+     * Find a path using Dijkstra's Algorithm
+     *
+     * @param start id of start node
+     * @param end id of end node
+     * @return list of node id's that make up the path
+     */
+    public ArrayList<Integer> findPath(int start, int end) {
+        Dijkstra pathFinder = new Dijkstra(adjacency, start, end);
+        return pathFinder.findPath();
     }
 
     double dist(double[] p1, double[] p2) {

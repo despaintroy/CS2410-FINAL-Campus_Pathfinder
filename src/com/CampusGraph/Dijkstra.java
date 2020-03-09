@@ -10,7 +10,7 @@ public class Dijkstra {
     private int destination;    // ID of the destination node
 
 
-    public Dijkstra(double[][] graph, int start, int destination) {
+    Dijkstra(double[][] graph, int start, int destination) {
 
         this.adjacency = graph;
         this.start = start;
@@ -27,7 +27,7 @@ public class Dijkstra {
     }
 
     // TODO: I think we can do this using only one level...lets try that. We just need to quit when nextList is empty
-    public ArrayList<Integer> findPath() {
+    ArrayList<Integer> findPath() {
 
         ArrayList<Integer> currList = new ArrayList<>();    // List of all nodes working on in the current level
         ArrayList<Integer> nextList = new ArrayList<>();    // List of adjacent nodes that need to be checked next
