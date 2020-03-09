@@ -1,5 +1,3 @@
-import com.CampusGraph.Node;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -8,14 +6,19 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Iterator;
 
 
-public class Persistence {
+class Persistence {
 
     final static String JSON_FILE_PATH = "data/persist.json";
 
-    public static void set(String key, String value) {
+    /**
+     * Add a new value, or update an existing value in the persistence file.
+     *
+     * @param key the key used to reference the value
+     * @param value the value to store
+     */
+    static void set(String key, String value) {
 
         JSONParser parser = new JSONParser();
         JSONObject obj;
@@ -38,24 +41,32 @@ public class Persistence {
         }
     }
 
-    public static String get(String key) throws CannotGetValueException {
+
+    /**
+     * Retrieve a value from the persistence file
+     *
+     * @param key the key used to reference the value
+     * @return the value stored at that key
+     * @throws CannotGetValueException
+     */
+    static String get(String key) throws CannotGetValueException {
 
         JSONParser parser = new JSONParser();
         JSONObject obj;
 
         // Create a new JSON object from file
-        try (Reader reader = new FileReader("data/persist.json")) {
+        try (Reader reader = new FileReader(JSON_FILE_PATH)) {
             obj = (JSONObject) parser.parse(reader);
         } catch (IOException | ParseException e) {
-            throw new CannotGetValueException("Cannot access file");
+            throw new CannotGetValueException("Persistence file not accessible");
         }
 
 
         // Return the specified key
-        String toReturn = obj.get(key)+"";
+        String toReturn = obj.get(key).toString();
 
         if (toReturn.equals("null")) {
-            throw new CannotGetValueException("Key doesn't exist in file");
+            throw new CannotGetValueException("Key not found in file");
         }
 
         return toReturn;
