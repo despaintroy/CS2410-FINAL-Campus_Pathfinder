@@ -11,21 +11,51 @@ public class Weather {
     // Set coordinates to get weather from. USU'a quad is at 41.740826, -111.812780
     private final static String LAT = "41.740826";
     private final static String LON = "-111.812780";
-    static URL apiURL;
+    private final static Long REFRESH_TIME = (long) (60 * 20);
+    private static URL apiURL;
 
-    private static double temperature;
+//    private static double temperature;
     private static long lastUpdated; // Time in seconds
 
     static double getTempF() throws CannotGetTempException {
-        updateTemp();
-        lastUpdated = System.currentTimeMillis()/1000;
-        return temperature;
+
+        try {
+            lastUpdated = Long.parseLong(Persistence.get("Weather.lastUpdated"));
+        } catch (Persistence.CannotGetValueException e) {
+            updateTemp();
+            try {
+                lastUpdated = Long.parseLong(Persistence.get("Weather.lastUpdated"));
+            } catch (Persistence.CannotGetValueException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        if (lastUpdated - System.currentTimeMillis() > REFRESH_TIME) {
+            updateTemp();
+        }
+
+        try {
+            String toReturn = Persistence.get("Weather.temperature");
+            return Double.parseDouble(toReturn);
+        } catch (Persistence.CannotGetValueException e) {
+            updateTemp();
+            try {
+                String toReturn = Persistence.get("Weather.temperature");
+                return Double.parseDouble(toReturn);
+            } catch (Persistence.CannotGetValueException e2) {
+                throw new CannotGetTempException("Cannot get value from file");
+            }
+        }
     }
 
     private static void updateTemp() throws CannotGetTempException {
+
         System.out.println("Making an API call...");
 
         try {
+
+            Persistence.set("Weather.lastUpdated", System.currentTimeMillis()+"");
+
             // Connect to the API
             apiURL = new URL("https://climacell-microweather-v1.p.rapidapi.com/weather/realtime?unit_system=us&fields=temp&lat=" + LAT + "&lon=" + LON);
             HttpURLConnection con = (HttpURLConnection) apiURL.openConnection();
@@ -58,7 +88,7 @@ public class Weather {
 
             con.disconnect();
             System.out.println("Complete.");
-            temperature = Float.parseFloat(temp);
+            Persistence.set("Weather.temperature", temp);
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -66,6 +96,8 @@ public class Weather {
         } catch (IOException e) {
             e.printStackTrace();
             throw new CannotGetTempException("IO exception while reading server response.");
+        } catch (Persistence.CannotGetValueException e) {
+            e.printStackTrace();
         }
     }
 
