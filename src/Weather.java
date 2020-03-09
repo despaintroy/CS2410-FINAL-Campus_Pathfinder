@@ -5,7 +5,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-// TODO: have weather store last updated time in persistence, so it only updates every 20 mins
 public class Weather {
 
     // Set coordinates to get weather from. USU'a quad is at 41.740826, -111.812780
@@ -14,11 +13,12 @@ public class Weather {
     private final static Long REFRESH_TIME = (long) (60 * 20);
     private static URL apiURL;
 
-//    private static double temperature;
-    private static long lastUpdated; // Time in seconds
 
     static double getTempF() throws CannotGetTempException {
 
+        long lastUpdated = 0;
+
+        // Find the time that the weather was last updated
         try {
             lastUpdated = Long.parseLong(Persistence.get("Weather.lastUpdated"));
         } catch (Persistence.CannotGetValueException e) {
@@ -30,10 +30,12 @@ public class Weather {
             }
         }
 
+        // Calculate the time since weather was last updated
         if (lastUpdated - System.currentTimeMillis() > REFRESH_TIME) {
             updateTemp();
         }
 
+        // Return the temperature
         try {
             String toReturn = Persistence.get("Weather.temperature");
             return Double.parseDouble(toReturn);
@@ -96,8 +98,6 @@ public class Weather {
         } catch (IOException e) {
             e.printStackTrace();
             throw new CannotGetTempException("IO exception while reading server response.");
-        } catch (Persistence.CannotGetValueException e) {
-            e.printStackTrace();
         }
     }
 
