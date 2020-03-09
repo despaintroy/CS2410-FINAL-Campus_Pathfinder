@@ -87,11 +87,8 @@ public class MapView {
 
         System.out.println("From (" + from + ") to (" + to + ")");
 
-//        int start = (int)(Math.random()*810);
-//        int end = (int)(Math.random()*810);
-
-        int start = Buildings.buildingNodes.get(from);
-        int end = Buildings.buildingNodes.get(to);
+        int start = Buildings.getBuildNodeId(from);
+        int end = Buildings.getBuildNodeId(to);
 
         ArrayList<Integer> bestPath = graph.findPath(start, end);
 
