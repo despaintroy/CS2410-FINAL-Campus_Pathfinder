@@ -12,8 +12,8 @@ public class CampusPathfinderController {
     private MapView map;
     static final int TOP_HEIGHT        = 35;
     static final int LEFT_WIDTH        = 180;
-    static final int VIEWPORT_WIDTH    = 725;
-    static final int VIEWPORT_HEIGHT   = 512;
+    static final int VIEWPORT_WIDTH    = 967;
+    static final int VIEWPORT_HEIGHT   = 683;
 
     @FXML
     public Pane centerPane;

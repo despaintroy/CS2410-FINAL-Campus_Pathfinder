@@ -19,7 +19,7 @@ class MapView {
     private final String MAP_FILEPATH = "data/campus_map.png";
     private final Color PATH_COLOR = Color.NAVY;
 
-    private final double SCALE = 1.93;
+    private final double SCALE = 1.448;
 
     private Pane masterPane;
     private Pane graphPane;
