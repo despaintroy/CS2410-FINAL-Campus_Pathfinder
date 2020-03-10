@@ -2,4 +2,4 @@
 /out/
 /.idea/
 *.iml
-persist.json
+settings.json

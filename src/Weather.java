@@ -27,12 +27,12 @@ class Weather {
 
         // Find the time that the weather was last updated
         try {
-            lastUpdated = Long.parseLong(Persistence.get("Weather.lastUpdated"));
-        } catch (Persistence.CannotGetValueException e) {
+            lastUpdated = Long.parseLong(Settings.get("Weather.lastUpdated"));
+        } catch (Settings.CannotGetValueException e) {
             updateTemp();
             try {
-                lastUpdated = Long.parseLong(Persistence.get("Weather.lastUpdated"));
-            } catch (Persistence.CannotGetValueException f) {
+                lastUpdated = Long.parseLong(Settings.get("Weather.lastUpdated"));
+            } catch (Settings.CannotGetValueException f) {
                 f.printStackTrace();
             }
         }
@@ -44,14 +44,14 @@ class Weather {
 
         // Return the temperature
         try {
-            String toReturn = Persistence.get("Weather.temperature");
+            String toReturn = Settings.get("Weather.temperature");
             return Double.parseDouble(toReturn);
-        } catch (Persistence.CannotGetValueException e) {
+        } catch (Settings.CannotGetValueException e) {
             updateTemp();
             try {
-                String toReturn = Persistence.get("Weather.temperature");
+                String toReturn = Settings.get("Weather.temperature");
                 return Double.parseDouble(toReturn);
-            } catch (Persistence.CannotGetValueException f) {
+            } catch (Settings.CannotGetValueException f) {
                 throw new CannotGetTempException("Cannot get value from file");
             }
         }
@@ -59,7 +59,7 @@ class Weather {
 
 
     /**
-     * Updates the temperature in the persistence file with the new temperature
+     * Updates the temperature in the settings file with the new temperature
      *
      * @throws CannotGetTempException
      */
@@ -69,7 +69,7 @@ class Weather {
 
         try {
 
-            Persistence.set("Weather.lastUpdated", System.currentTimeMillis()+"");
+            Settings.set("Weather.lastUpdated", System.currentTimeMillis()+"");
 
             // Connect to the API
             apiURL = new URL("https://climacell-microweather-v1.p.rapidapi.com/weather/realtime?unit_system=us&fields=temp&lat=" + LAT + "&lon=" + LON);
@@ -103,7 +103,7 @@ class Weather {
 
             con.disconnect();
             System.out.println("Complete.");
-            Persistence.set("Weather.temperature", temp);
+            Settings.set("Weather.temperature", temp);
 
         } catch (MalformedURLException e) {
             e.printStackTrace();

@@ -8,12 +8,12 @@ import java.io.IOException;
 import java.io.Reader;
 
 
-class Persistence {
+class Settings {
 
-    final static String JSON_FILE_PATH = "data/persist.json";
+    private final static String SETTINGS_JSON = "data/settings.json";
 
     /**
-     * Add a new value, or update an existing value in the persistence file.
+     * Add a new value, or update an existing value in the settings file.
      *
      * @param key the key used to reference the value
      * @param value the value to store
@@ -24,7 +24,7 @@ class Persistence {
         JSONObject obj;
 
         // Create a JSON object from file
-        try (Reader reader = new FileReader(JSON_FILE_PATH)) {
+        try (Reader reader = new FileReader(SETTINGS_JSON)) {
             obj = (JSONObject) parser.parse(reader);
         } catch (IOException | ParseException e) {
             obj = new JSONObject();
@@ -34,7 +34,7 @@ class Persistence {
         obj.put(key, value);
 
         // Write the JSON object back to file
-        try (FileWriter file = new FileWriter(JSON_FILE_PATH)) {
+        try (FileWriter file = new FileWriter(SETTINGS_JSON)) {
             file.write(obj.toJSONString());
         } catch (IOException e) {
             e.printStackTrace();
@@ -43,7 +43,7 @@ class Persistence {
 
 
     /**
-     * Retrieve a value from the persistence file
+     * Retrieve a value from the settings file
      *
      * @param key the key used to reference the value
      * @return the value stored at that key
@@ -55,10 +55,10 @@ class Persistence {
         JSONObject obj;
 
         // Create a new JSON object from file
-        try (Reader reader = new FileReader(JSON_FILE_PATH)) {
+        try (Reader reader = new FileReader(SETTINGS_JSON)) {
             obj = (JSONObject) parser.parse(reader);
         } catch (IOException | ParseException e) {
-            throw new CannotGetValueException("Persistence file not accessible");
+            throw new CannotGetValueException("Settings file not accessible");
         }
 
 
