@@ -64,8 +64,8 @@ public class Graph {
                 if (active) {
 
                     // Create the adjacency matrix
-                    double[] p1 = {nodes.get(n1).x, nodes.get(n1).y};
-                    double[] p2 = {nodes.get(n2).x, nodes.get(n2).y};
+                    double[] p1 = {nodes.get(n1).getX(), nodes.get(n1).getY()};
+                    double[] p2 = {nodes.get(n2).getX(), nodes.get(n2).getY()};
                     adjacency[n1][n2] = new Edge(true, dist(p1, p2));
                 }
 
@@ -113,8 +113,8 @@ public class Graph {
     public double[][] getNodeCoords() {
         double[][] temp = new double[nodes.size()][2];
         for (int i=0; i<nodes.size(); i++) {
-            temp[i][0] = nodes.get(i).x;
-            temp[i][1] = nodes.get(i).y;
+            temp[i][0] = nodes.get(i).getX();
+            temp[i][1] = nodes.get(i).getY();
         }
         return temp;
     }
@@ -132,10 +132,10 @@ public class Graph {
 
                 if (adjacency[i][j].isActive()) {
                     Double[] line = new Double[4];
-                    line[0] = nodes.get(i).x;
-                    line[1] = nodes.get(i).y;
-                    line[2] = nodes.get(j).x;
-                    line[3] = nodes.get(j).y;
+                    line[0] = nodes.get(i).getX();
+                    line[1] = nodes.get(i).getY();
+                    line[2] = nodes.get(j).getX();
+                    line[3] = nodes.get(j).getY();
 
                     temp.add(line);
                 }

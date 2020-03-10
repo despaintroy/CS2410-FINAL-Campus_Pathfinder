@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 class Dijkstra {
 
-    private Edge [][] adjacency;  // Adjacency matrix that holds distances between nodes
+    private Edge [][] adjacency;    // Adjacency matrix that holds distances between nodes
     private Info [][] matrix;       // 2D Array of Info objects for running Dijkstra's algorithm
     private int start;              // ID of the starting node
     private int destination;        // ID of the destination node

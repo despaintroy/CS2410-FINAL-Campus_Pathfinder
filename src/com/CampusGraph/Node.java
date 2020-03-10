@@ -2,13 +2,20 @@ package com.CampusGraph;
 
 public class Node {
 
-    // TODO: Need to make these private
-    public double x;
-    public double y;
+    private double x;
+    private double y;
 
     Node (double x, double y) {
         this.x = x;
         this.y = y;
+    }
+
+    double getX() {
+        return x;
+    }
+
+    double getY() {
+        return y;
     }
 
     @Override
