@@ -101,9 +101,11 @@ class MapView {
 
         ArrayList<Integer> bestPath = graph.findPath(start, end);
 
+        double [][] nodeCoords = graph.getNodeCoords();
+
         // Mark with circles the endpoints
-        Circle startCircle = new Circle(graph.nodes.get(start).x/SCALE, graph.nodes.get(start).y/SCALE, 5 , PATH_COLOR);
-        Circle endCircle = new Circle(graph.nodes.get(end).x/SCALE, graph.nodes.get(end).y/SCALE, 5 , PATH_COLOR);
+        Circle startCircle = new Circle(nodeCoords[start][0]/SCALE, nodeCoords[start][1]/SCALE, 5 , PATH_COLOR);
+        Circle endCircle = new Circle(nodeCoords[end][0]/SCALE, nodeCoords[end][1]/SCALE, 5 , PATH_COLOR);
 
         // Clear any existing graph from off the pane
         graphPane.getChildren().clear();
@@ -112,10 +114,10 @@ class MapView {
         for (int i=0; i<bestPath.size()-1; i++) {
 
             // Draw the new path
-            double x1 = graph.nodes.get(bestPath.get(i)).x;
-            double y1 = graph.nodes.get(bestPath.get(i)).y;
-            double x2 = graph.nodes.get(bestPath.get(i+1)).x;
-            double y2 = graph.nodes.get(bestPath.get(i+1)).y;
+            double x1 = nodeCoords[bestPath.get(i)][0];
+            double y1 = nodeCoords[bestPath.get(i)][1];
+            double x2 = nodeCoords[bestPath.get(i+1)][0];
+            double y2 = nodeCoords[bestPath.get(i+1)][1];
 
             Line temp = new Line(x1/SCALE, y1/SCALE, x2/SCALE, y2/SCALE);
             temp.setStroke(PATH_COLOR);

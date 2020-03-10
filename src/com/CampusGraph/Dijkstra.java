@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 class Dijkstra {
 
-    private double [][] adjacency;  // Adjacency matrix that holds distances between nodes
+    private Edge [][] adjacency;  // Adjacency matrix that holds distances between nodes
     private Info [][] matrix;       // 2D Array of Info objects for running Dijkstra's algorithm
     private int start;              // ID of the starting node
     private int destination;        // ID of the destination node
@@ -18,7 +18,7 @@ class Dijkstra {
      * @param destination Index of the end node
      *                    .
      */
-    Dijkstra(double[][] graph, int start, int destination) {
+    Dijkstra(Edge[][] graph, int start, int destination) {
 
         this.adjacency = graph;
         this.start = start;
@@ -61,8 +61,8 @@ class Dijkstra {
                 ArrayList<Integer> conns = getAdjacentNodes(curr);
 
                 for (int c : conns) {
-                    if (matrix[level][c].distance > matrix[level - 1][curr].distance + getAdjacency(curr, c)) {
-                        matrix[level][c] = new Info(curr, matrix[level - 1][curr].distance + getAdjacency(curr, c));
+                    if (matrix[level][c].distance > matrix[level - 1][curr].distance + getAdjacency(curr, c).getLength()) {
+                        matrix[level][c] = new Info(curr, matrix[level - 1][curr].distance + getAdjacency(curr, c).getLength());
                         nextList.add(c);
                     }
                 }
@@ -98,7 +98,7 @@ class Dijkstra {
 
         for (int i = 0; i< adjacency.length; i++) {
             for (int j=0; j<i; j++){
-                if (adjacency[i][j]>=0){
+                if (adjacency[i][j].isActive()){
 
                     if (i==id) {
                         ints.add(j);
@@ -121,7 +121,7 @@ class Dijkstra {
      *
      * @return the distance between the nodes form the adjacency matrix
      */
-    private double getAdjacency(int n1, int n2) {
+    private Edge getAdjacency(int n1, int n2) {
         return adjacency[Math.max(n1, n2)][Math.min(n1, n2)];
     }
 
