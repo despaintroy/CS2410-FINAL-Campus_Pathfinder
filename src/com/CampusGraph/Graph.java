@@ -43,7 +43,6 @@ public class Graph {
             e.printStackTrace();
         }
 
-
         // Read the edges from file
         adjacency = new Edge[nodes.size()][nodes.size()];
 
@@ -75,6 +74,7 @@ public class Graph {
             e.printStackTrace();
         }
     }
+
 
     @Override
     public String toString() {
@@ -159,6 +159,34 @@ public class Graph {
 
 
     /**
+     * Finds the closest node to the given coordinate
+     *
+     * @param x given x coordinate
+     * @param y given y coordinate
+     * @return the index of the closest node on the graph
+     */
+    public int getClosestNode(double x, double y) throws EmptyGraphException {
+
+        if (nodes.size()<1) {
+            throw new EmptyGraphException("No nodes in graph");
+        }
+
+        int closestNodeId = 0;
+        double closestDist = dist(new double[]{nodes.get(0).getX(), nodes.get(0).getY()}, new double[]{x, y});
+
+        for (int i=0; i<nodes.size(); i++) {
+            Node n = nodes.get(i);
+            double d = dist(new double[]{n.getX(), n.getY()}, new double[]{x, y});
+            if (d < closestDist) {
+                closestDist = d;
+                closestNodeId = i;
+            }
+        }
+        return closestNodeId;
+    }
+
+
+    /**
      * Find the distance between two points
      *
      * @param p1 point 1
@@ -167,5 +195,12 @@ public class Graph {
      */
     private double dist(double[] p1, double[] p2) {
         return Math.sqrt(Math.pow(p1[0]-p2[0], 2) + Math.pow(p1[1]-p2[1], 2));
+    }
+
+
+    public static class EmptyGraphException extends Exception {
+        EmptyGraphException (String message) {
+            super(message);
+        }
     }
 }

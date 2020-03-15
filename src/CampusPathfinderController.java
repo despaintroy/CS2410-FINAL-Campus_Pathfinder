@@ -1,4 +1,5 @@
 import com.CampusGraph.Buildings;
+import com.CampusGraph.Graph;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -50,5 +51,9 @@ public class CampusPathfinderController {
         map = new MapView(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
         map.showAllPaths();
         centerPane.getChildren().setAll(map.getMasterPane());
+
+        centerPane.setOnMouseClicked(e -> {
+            map.click(e.getX(), e.getY());
+        });
     }
 }

@@ -22,8 +22,11 @@ class MapView {
     private final double SCALE = 1.448;
 
     private Pane masterPane;
-    private Pane graphPane;
+    private Pane pathsPane;
     private Graph graph;
+
+    private double[][] clickLocations = {{-1,-1},{-1,-1}};
+
 
     /**
      * Initializes a MapView with just an image to display for  tbe background.
@@ -36,7 +39,7 @@ class MapView {
         graph = new Graph(NODES_FILEPATH, EDGES_FILEPATH);
 
         masterPane = new StackPane();
-        graphPane = new Pane();
+        pathsPane = new Pane();
         ImageView iv = new ImageView();
 
         // Load the map background
@@ -50,7 +53,7 @@ class MapView {
             e.printStackTrace();
         }
 
-        masterPane.getChildren().addAll(iv, graphPane);
+        masterPane.getChildren().addAll(iv, pathsPane);
     }
 
 
@@ -59,7 +62,7 @@ class MapView {
      */
     void showAllPaths() {
 
-        graphPane.getChildren().clear();
+        pathsPane.getChildren().clear();
 
         double [][] nodeCoords = graph.getNodeCoords();
         ArrayList<Double[]> edgeCoords = graph.getEdgeCoords();
@@ -70,7 +73,7 @@ class MapView {
             double y = coord[1];
 
             Circle temp = new Circle(x/SCALE, y/SCALE,2, PATH_COLOR);
-            graphPane.getChildren().add(temp);
+            pathsPane.getChildren().add(temp);
         }
 
         for (Double[] coords : edgeCoords) {
@@ -81,7 +84,7 @@ class MapView {
 
             Line temp = new Line(x1/SCALE, y1/SCALE, x2/SCALE, y2/SCALE);
             temp.setStroke(PATH_COLOR);
-            graphPane.getChildren().add(temp);
+            pathsPane.getChildren().add(temp);
         }
     }
 
@@ -89,15 +92,28 @@ class MapView {
     /**
      * Draw the shortest path between two nodes
      *
-     * @param from building name to start from
-     * @param to building name to end at
+     * @param from the name of the building to start at
+     * @param to the name of the building to end at
      */
     void drawShortestPath(String from, String to) {
 
         System.out.println("From (" + from + ") to (" + to + ")");
 
+        // Find the node of the building, then call the other drawShortestPath function
         int start = Buildings.getBuildNodeId(from);
         int end = Buildings.getBuildNodeId(to);
+
+        drawShortestPath(start, end);
+    }
+
+
+    /**
+     * Draw the shortest path between two nodes
+     *
+     * @param start building name to start from
+     * @param end building name to end at
+     */
+    void drawShortestPath(int start, int end) {
 
         ArrayList<Integer> bestPath = graph.findPath(start, end);
 
@@ -108,7 +124,7 @@ class MapView {
         Circle endCircle = new Circle(nodeCoords[end][0]/SCALE, nodeCoords[end][1]/SCALE, 5 , PATH_COLOR);
 
         // Clear any existing graph from off the pane
-        graphPane.getChildren().clear();
+        pathsPane.getChildren().clear();
 
         // Draw the path onto the pane
         for (int i=0; i<bestPath.size()-1; i++) {
@@ -122,10 +138,60 @@ class MapView {
             Line temp = new Line(x1/SCALE, y1/SCALE, x2/SCALE, y2/SCALE);
             temp.setStroke(PATH_COLOR);
             temp.setStrokeWidth(2);
-            graphPane.getChildren().add(temp);
+            pathsPane.getChildren().add(temp);
         }
 
-        graphPane.getChildren().addAll(startCircle, endCircle);
+        pathsPane.getChildren().addAll(startCircle, endCircle);
+    }
+
+
+    /**
+     * Finds the closest node to the given coordinate
+     *
+     * @param x given x coordinate
+     * @param y given y coordinate
+     * @return the index of the closest node on the graph
+     */
+    int getClosestNode(double x, double y) throws Graph.EmptyGraphException {
+        return graph.getClosestNode(x*SCALE, y*SCALE);
+    }
+
+
+    // TODO: This class handles clicks on the map.
+    void click(double x, double y) {
+
+        // First Click
+        pathsPane.getChildren().clear();
+
+        if (clickLocations[0][0] == -1) {
+            clickLocations[0] = new double[]{x, y};
+            pathsPane.setOnMouseMoved(event -> {
+                pathsPane.getChildren().clear();
+                Line myLine = new Line(x, y, event.getX(), event.getY());
+                myLine.setStroke(PATH_COLOR);
+                myLine.setStrokeWidth(2);
+                pathsPane.getChildren().add(myLine);
+            });
+        }
+        // Second Click
+        else if (clickLocations[1][0] == -1) {
+            clickLocations[1] = new double[]{x, y};
+            pathsPane.setOnMouseMoved(null);
+            try {
+                drawShortestPath(
+                    getClosestNode(
+                        clickLocations[0][0],
+                        clickLocations[0][1]
+                    ),
+                    getClosestNode(
+                        clickLocations[1][0],
+                        clickLocations[1][1]
+                    ));
+            } catch (Graph.EmptyGraphException e) {
+                e.printStackTrace();
+            }
+            clickLocations = new double[][]{{-1,-1},{-1,-1}};
+        }
     }
 
 
