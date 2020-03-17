@@ -1,5 +1,4 @@
 import com.CampusGraph.Buildings;
-import com.CampusGraph.Graph;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -26,7 +25,7 @@ public class CampusPathfinderController {
     public ComboBox buildingTo;
 
     @FXML
-    public void findPathSubmit() {
+    public void findPathClicked() {
         map.drawShortestPath(buildingFrom.getValue().toString(), buildingTo.getValue().toString());
         centerPane = map.getMasterPane();
     }
@@ -40,18 +39,20 @@ public class CampusPathfinderController {
         topBar.setPrefHeight(TOP_HEIGHT);
         leftBar.setPrefWidth(LEFT_WIDTH);
 
+        // Display the temperature
         try {
             tempReadout.setText("Temperature is " + Math.round(Weather.getTempF()) + " ºF");
         } catch (Weather.CannotGetTempException e) {
             tempReadout.setText("Temperature is -- ºF");
             e.printStackTrace();
         }
-//        tempReadout.setText("Temperature is -- ºF");
 
+        // Construct the map view
         map = new MapView(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
-        map.showAllPaths();
+//        map.showAllPaths();
         centerPane.getChildren().setAll(map.getMasterPane());
 
+        // Handle clicks on the graph
         centerPane.setOnMouseClicked(e -> {
             map.click(e.getX(), e.getY());
         });

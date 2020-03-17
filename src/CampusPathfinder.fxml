@@ -48,7 +48,7 @@
 
             <Label styleClass="vform-spacer"/>
 
-            <Button styleClass="vform-submit" fx:id="findPathSubmit" onAction="#findPathSubmit" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+            <Button styleClass="vform-submit" fx:id="findPathSubmit" onAction="#findPathClicked" HBox.hgrow="ALWAYS" maxWidth="Infinity">
                 Find Path
             </Button>
 
