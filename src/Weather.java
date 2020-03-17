@@ -10,7 +10,7 @@ class Weather {
     // Set coordinates to get weather from. USU'a quad is at 41.740826, -111.812780
     private final static String LAT = "41.740826";
     private final static String LON = "-111.812780";
-    private final static Long REFRESH_TIME = (long) (60 * 20);
+    private final static Long REFRESH_TIME = (long) 20*(1000*60);
     private static URL apiURL;
 
 
@@ -38,7 +38,7 @@ class Weather {
         }
 
         // Refresh weather if not updated recently enough
-        if (lastUpdated - System.currentTimeMillis() > REFRESH_TIME) {
+        if (System.currentTimeMillis()-lastUpdated > REFRESH_TIME) {
             updateTemp();
         }
 
