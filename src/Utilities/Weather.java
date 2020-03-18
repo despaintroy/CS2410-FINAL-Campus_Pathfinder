@@ -1,3 +1,5 @@
+package Utilities;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -5,7 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-class Weather {
+public class Weather {
 
     // Set coordinates to get weather from. USU'a quad is at 41.740826, -111.812780
     private final static String LAT = "41.740826";
@@ -21,17 +23,17 @@ class Weather {
      * @return the current temperature
      * @throws CannotGetTempException
      */
-    static double getTempF() throws CannotGetTempException {
+    public static double getTempF() throws CannotGetTempException {
 
         long lastUpdated = 0;
 
         // Find the time that the weather was last updated
         try {
-            lastUpdated = Long.parseLong(Settings.get("Weather.lastUpdated"));
+            lastUpdated = Long.parseLong(Settings.get("Utilities.Weather.lastUpdated"));
         } catch (Settings.CannotGetValueException e) {
             updateTemp();
             try {
-                lastUpdated = Long.parseLong(Settings.get("Weather.lastUpdated"));
+                lastUpdated = Long.parseLong(Settings.get("Utilities.Weather.lastUpdated"));
             } catch (Settings.CannotGetValueException f) {
                 f.printStackTrace();
             }
@@ -44,12 +46,12 @@ class Weather {
 
         // Return the temperature
         try {
-            String toReturn = Settings.get("Weather.temperature");
+            String toReturn = Settings.get("Utilities.Weather.temperature");
             return Double.parseDouble(toReturn);
         } catch (Settings.CannotGetValueException e) {
             updateTemp();
             try {
-                String toReturn = Settings.get("Weather.temperature");
+                String toReturn = Settings.get("Utilities.Weather.temperature");
                 return Double.parseDouble(toReturn);
             } catch (Settings.CannotGetValueException f) {
                 throw new CannotGetTempException("Cannot get value from file");
@@ -69,7 +71,7 @@ class Weather {
 
         try {
 
-            Settings.set("Weather.lastUpdated", System.currentTimeMillis()+"");
+            Settings.set("Utilities.Weather.lastUpdated", System.currentTimeMillis()+"");
 
             // Connect to the API
             apiURL = new URL("https://climacell-microweather-v1.p.rapidapi.com/weather/realtime?unit_system=us&fields=temp&lat=" + LAT + "&lon=" + LON);
@@ -97,13 +99,14 @@ class Weather {
             }
             in.close();
 
+            // TODO: Read in as JSON instead of manually chopping out the string
             // Trim the temp out of the string
             String returned = content.toString();
             String temp = returned.substring(returned.indexOf("value") + 7, returned.indexOf("value") + 7 + 4);
 
             con.disconnect();
             System.out.println("Complete.");
-            Settings.set("Weather.temperature", temp);
+            Settings.set("Utilities.Weather.temperature", temp);
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -114,7 +117,7 @@ class Weather {
         }
     }
 
-    static class CannotGetTempException extends Exception {
+    public static class CannotGetTempException extends Exception {
         CannotGetTempException(String message) {
             super(message);
         }

@@ -1,4 +1,4 @@
-package com.CampusGraph;
+package CampusMapView.Graph;
 
 public class Node {
 

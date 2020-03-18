@@ -1,4 +1,4 @@
-package com.CampusGraph;
+package CampusMapView.Graph;
 
 import java.io.FileReader;
 import java.io.IOException;

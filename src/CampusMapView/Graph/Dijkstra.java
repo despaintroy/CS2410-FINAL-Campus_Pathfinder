@@ -1,4 +1,4 @@
-package com.CampusGraph;
+package CampusMapView.Graph;
 
 import java.util.ArrayList;
 

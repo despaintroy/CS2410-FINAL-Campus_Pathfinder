@@ -1,5 +1,6 @@
-import com.CampusGraph.Buildings;
-import com.CampusGraph.Graph;
+package CampusMapView;
+
+import CampusMapView.Graph.Graph;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -12,7 +13,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-class MapView {
+public class MapView {
 
     private final String EDGES_FILEPATH = "data/edges.json";
     private final String NODES_FILEPATH = "data/nodes.json";
@@ -29,12 +30,12 @@ class MapView {
 
 
     /**
-     * Initializes a MapView with just an image to display for  tbe background.
+     * Initializes a MapView.MapView with just an image to display for  tbe background.
      *
      * @param viewport_width width of pane to create
      * @param viewport_height height of pane to create
      */
-    MapView(int viewport_width, int viewport_height) {
+    public MapView(int viewport_width, int viewport_height) {
 
         graph = new Graph(NODES_FILEPATH, EDGES_FILEPATH);
 
@@ -60,7 +61,7 @@ class MapView {
     /**
      * Draw all paths and nodes from the graph
      */
-    void showAllPaths() {
+    public void showAllPaths() {
 
         clearPaths();
 
@@ -95,7 +96,7 @@ class MapView {
      * @param from the name of the building to start at
      * @param to the name of the building to end at
      */
-    void drawShortestPath(String from, String to) {
+    public void drawShortestPath(String from, String to) {
 
         System.out.println("From (" + from + ") to (" + to + ")");
 
@@ -158,7 +159,7 @@ class MapView {
 
 
     // TODO: This class handles clicks on the map.
-    void click(double x, double y) {
+    public void click(double x, double y) {
 
         // First Click
         clearPaths();
@@ -194,7 +195,7 @@ class MapView {
         }
     }
 
-    void clearPaths() {
+    public void clearPaths() {
         pathsPane.getChildren().clear();
     }
 
@@ -204,7 +205,7 @@ class MapView {
      *
      * @return the constructed pane
      */
-    Pane getMasterPane() {
+    public Pane getMasterPane() {
         return masterPane;
     }
 }

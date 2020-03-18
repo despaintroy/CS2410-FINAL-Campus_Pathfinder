@@ -1,4 +1,4 @@
-package com.CampusGraph;
+package CampusMapView;
 
 import java.util.Hashtable;
 import java.util.Map;

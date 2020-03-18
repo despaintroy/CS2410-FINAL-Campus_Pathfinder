@@ -26,7 +26,8 @@
                         <String fx:value="Tag Buildings"/>
                     </FXCollections>
                 </items>
-            </ComboBox>            <ComboBox fx:id="buildingActionChooser" promptText="Choose building" />
+            </ComboBox>
+            <ComboBox fx:id="buildingActionChooser" promptText="Choose building" />
         </HBox>
     </bottom>
 

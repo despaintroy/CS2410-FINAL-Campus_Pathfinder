@@ -16,13 +16,6 @@ public class CampusPathfinder extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("CampusPathfinder.fxml"));
         Scene scene = new Scene(root);
 
-        // Get the width/height of different elements from the
-//        double topHeight = CampusPathfinderController.TOP_HEIGHT;
-//        double bottomHeight = CampusPathfinderController.BOTTOM_HEIGHT;
-//        double leftWidth = CampusPathfinderController.LEFT_WIDTH;
-//        double viewportWidth = CampusPathfinderController.VIEWPORT_WIDTH;
-//        double viewportHeight = CampusPathfinderController.VIEWPORT_HEIGHT;
-
         stage.setTitle("Campus Pathfinder");
         stage.setScene(scene);
         stage.setResizable(false);

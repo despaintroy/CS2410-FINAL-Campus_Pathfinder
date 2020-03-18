@@ -1,3 +1,5 @@
+package Utilities;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -58,14 +60,16 @@ class Settings {
         try (Reader reader = new FileReader(SETTINGS_JSON)) {
             obj = (JSONObject) parser.parse(reader);
         } catch (IOException | ParseException e) {
-            throw new CannotGetValueException("Settings file not accessible");
+            throw new CannotGetValueException("Utilities.Settings file not accessible");
         }
 
 
         // Return the specified key
-        String toReturn = obj.get(key).toString();
-
-        if (toReturn.equals("null")) {
+        String toReturn;
+        try {
+            toReturn = obj.get(key).toString();
+        } catch (Exception e) {
+            e.printStackTrace();
             throw new CannotGetValueException("Key not found in file");
         }
 

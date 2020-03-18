@@ -1,4 +1,6 @@
-import com.CampusGraph.Buildings;
+import CampusMapView.MapView;
+import CampusMapView.Buildings;
+import Utilities.Weather;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
