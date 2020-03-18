@@ -17,15 +17,14 @@ public class CampusPathfinder extends Application {
         Scene scene = new Scene(root);
 
         // Get the width/height of different elements from the
-        double topHeight = CampusPathfinderController.TOP_HEIGHT;
-        double leftWidth = CampusPathfinderController.LEFT_WIDTH;
-        double viewportWidth = CampusPathfinderController.VIEWPORT_WIDTH;
-        double viewportHeight = CampusPathfinderController.VIEWPORT_HEIGHT;
+//        double topHeight = CampusPathfinderController.TOP_HEIGHT;
+//        double bottomHeight = CampusPathfinderController.BOTTOM_HEIGHT;
+//        double leftWidth = CampusPathfinderController.LEFT_WIDTH;
+//        double viewportWidth = CampusPathfinderController.VIEWPORT_WIDTH;
+//        double viewportHeight = CampusPathfinderController.VIEWPORT_HEIGHT;
 
         stage.setTitle("Campus Pathfinder");
         stage.setScene(scene);
-        stage.setWidth(leftWidth+viewportWidth);
-        stage.setHeight(topHeight+viewportHeight);
         stage.setResizable(false);
         stage.show();
     }

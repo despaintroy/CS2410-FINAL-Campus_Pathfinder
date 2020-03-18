@@ -22,11 +22,11 @@
             <ComboBox fx:id="actionChooser" id="action-chooser">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="Normal"/>
-                        <String fx:value="Tag Building"/>
+                        <String fx:value="Pathfinder"/>
+                        <String fx:value="Tag Buildings"/>
                     </FXCollections>
                 </items>
-            </ComboBox>
+            </ComboBox>            <ComboBox fx:id="buildingActionChooser" promptText="Choose building" />
         </HBox>
     </bottom>
 
@@ -34,30 +34,10 @@
         <VBox id="left-bar" fx:id="leftBar" alignment="TOP_LEFT">
 
             <Label styleClass="vform-label">From:</Label>
-            <ComboBox styleClass="vform-combo" fx:id="buildingFrom" id="building-from" promptText="Choose building" HBox.hgrow="ALWAYS" maxWidth="Infinity">
-                <items>
-                    <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="Old Main"/>
-                        <String fx:value="Life Sciences"/>
-                        <String fx:value="Engineering"/>
-                        <String fx:value="Family Life"/>
-                        <String fx:value="Institute"/>
-                    </FXCollections>
-                </items>
-            </ComboBox>
+            <ComboBox styleClass="vform-combo" fx:id="buildingFrom" id="building-from" promptText="Choose building" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
 
             <Label styleClass="vform-label">To:</Label>
-            <ComboBox styleClass="vform-combo" fx:id="buildingTo" id="building-to" promptText="Choose building" HBox.hgrow="ALWAYS" maxWidth="Infinity">
-                <items>
-                    <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="Old Main"/>
-                        <String fx:value="Life Sciences"/>
-                        <String fx:value="Engineering"/>
-                        <String fx:value="Family Life"/>
-                        <String fx:value="Institute"/>
-                    </FXCollections>
-                </items>
-            </ComboBox>
+            <ComboBox styleClass="vform-combo" fx:id="buildingTo" id="building-to" promptText="Choose building" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
 
             <Label styleClass="vform-spacer"/>
 

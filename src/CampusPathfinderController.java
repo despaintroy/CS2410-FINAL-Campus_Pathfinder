@@ -23,9 +23,10 @@ public class CampusPathfinderController {
     public VBox leftBar;
     public Button findPathSubmit;
     public Text tempReadout;
-    public ComboBox buildingFrom;
-    public ComboBox buildingTo;
-    public ComboBox actionChooser;
+    public ComboBox<String> buildingFrom;
+    public ComboBox<String> buildingTo;
+    public ComboBox<String> actionChooser;
+    public ComboBox<String> buildingActionChooser;
 
     @FXML
     public void findPathClicked() {
@@ -59,6 +60,21 @@ public class CampusPathfinderController {
         // Handle clicks on the graph
         centerPane.setOnMouseClicked(e -> {
             map.click(e.getX(), e.getY());
+        });
+
+        // Populate the Combo Boxes
+        buildingFrom.getItems().addAll(Buildings.getCodes());
+        buildingTo.getItems().addAll(Buildings.getCodes());
+        buildingActionChooser.getItems().addAll(Buildings.getCodes());
+
+        // Handle changes to the action combo box
+        actionChooser.setOnAction(event -> {
+            if (actionChooser.getValue().equals("Pathfinder")) {
+                map.clearPaths();
+            }
+            else if (actionChooser.getValue().equals("Tag Buildings")) {
+                map.showAllPaths();
+            }
         });
     }
 }
