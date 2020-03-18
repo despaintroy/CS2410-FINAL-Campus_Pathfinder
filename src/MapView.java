@@ -62,7 +62,7 @@ class MapView {
      */
     void showAllPaths() {
 
-        pathsPane.getChildren().clear();
+        clearPaths();
 
         double [][] nodeCoords = graph.getNodeCoords();
         ArrayList<Double[]> edgeCoords = graph.getEdgeCoords();
@@ -124,7 +124,7 @@ class MapView {
         Circle endCircle = new Circle(nodeCoords[end][0]/SCALE, nodeCoords[end][1]/SCALE, 5 , PATH_COLOR);
 
         // Clear any existing graph from off the pane
-        pathsPane.getChildren().clear();
+        clearPaths();
 
         // Draw the path onto the pane
         for (int i=0; i<bestPath.size()-1; i++) {
@@ -161,7 +161,7 @@ class MapView {
     void click(double x, double y) {
 
         // First Click
-        pathsPane.getChildren().clear();
+        clearPaths();
 
         if (clickLocations[0][0] == -1) {
             clickLocations[0] = new double[]{x, y};
@@ -192,6 +192,10 @@ class MapView {
             }
             clickLocations = new double[][]{{-1,-1},{-1,-1}};
         }
+    }
+
+    void clearPaths() {
+        pathsPane.getChildren().clear();
     }
 
 
