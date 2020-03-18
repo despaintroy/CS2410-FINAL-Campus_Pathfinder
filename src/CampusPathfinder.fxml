@@ -17,6 +17,19 @@
         </HBox>
     </top>
 
+    <bottom>
+        <HBox id="bottom-bar" fx:id="bottomBar" alignment="CENTER_LEFT">
+            <ComboBox fx:id="actionChooser" id="action-chooser">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Normal"/>
+                        <String fx:value="Tag Building"/>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+        </HBox>
+    </bottom>
+
     <left>
         <VBox id="left-bar" fx:id="leftBar" alignment="TOP_LEFT">
 

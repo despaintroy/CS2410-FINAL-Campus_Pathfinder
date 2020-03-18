@@ -11,6 +11,7 @@ public class CampusPathfinderController {
 
     private MapView map;
     static final int TOP_HEIGHT        = 35;
+    static final int BOTTOM_HEIGHT     = 35;
     static final int LEFT_WIDTH        = 180;
     static final int VIEWPORT_WIDTH    = 967;
     static final int VIEWPORT_HEIGHT   = 683;
@@ -18,11 +19,13 @@ public class CampusPathfinderController {
     @FXML
     public Pane centerPane;
     public HBox topBar;
+    public HBox bottomBar;
     public VBox leftBar;
     public Button findPathSubmit;
     public Text tempReadout;
     public ComboBox buildingFrom;
     public ComboBox buildingTo;
+    public ComboBox actionChooser;
 
     @FXML
     public void findPathClicked() {
@@ -37,6 +40,7 @@ public class CampusPathfinderController {
 
         // Set the dimensions of the viewport
         topBar.setPrefHeight(TOP_HEIGHT);
+        bottomBar.setPrefHeight(BOTTOM_HEIGHT);
         leftBar.setPrefWidth(LEFT_WIDTH);
 
         // Display the temperature

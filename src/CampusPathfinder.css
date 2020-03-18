@@ -3,6 +3,11 @@
     -fx-padding: 0 10 0 0
 }
 
+#bottom-bar {
+    -fx-background-color: rgb(30, 50, 80);
+    -fx-padding: 0 10 0 0
+}
+
 #temp-readout {
     -fx-font-size: 20px;
     -fx-fill: white;
