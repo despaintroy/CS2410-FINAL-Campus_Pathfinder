@@ -1,6 +1,7 @@
 package CampusMapView;
 
 import CampusMapView.Graph.Graph;
+import CampusMapView.Graph.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -63,15 +64,11 @@ public class MapView {
 
         clearPaths();
 
-        double [][] nodeCoords = graph.getAllNodeCoords();
+        Node[] nodes = graph.getAllNodes();
         ArrayList<Double[]> edgeCoords = graph.getAllEdgeCoords();
 
-        for (double[] coord : nodeCoords) {
-
-            double x = coord[0];
-            double y = coord[1];
-
-            Circle temp = new Circle(x/SCALE, y/SCALE,2, PATH_COLOR);
+        for (Node n : nodes) {
+            Circle temp = new Circle(n.getX()/SCALE, n.getY()/SCALE,2, PATH_COLOR);
             pathsPane.getChildren().add(temp);
         }
 
@@ -114,33 +111,31 @@ public class MapView {
      */
     public void drawShortestPath(int start, int end) {
 
-        ArrayList<Integer> bestPath = graph.findPath(start, end);
-
-        double [][] nodeCoords = graph.getAllNodeCoords();
-
-        // Mark with circles the endpoints
-        Circle startCircle = new Circle(nodeCoords[start][0]/SCALE, nodeCoords[start][1]/SCALE, 5 , PATH_COLOR);
-        Circle endCircle = new Circle(nodeCoords[end][0]/SCALE, nodeCoords[end][1]/SCALE, 5 , PATH_COLOR);
+        Integer[] bestPath = graph.findPath(start, end);
+        Node[] nodes = graph.getAllNodes();
 
         // Clear any existing graph from off the pane
         clearPaths();
 
+        // Mark with circles the endpoints
+        Circle startCircle = new Circle(nodes[start].getX()/SCALE, nodes[start].getY()/SCALE, 5 , PATH_COLOR);
+        Circle endCircle = new Circle(nodes[end].getX()/SCALE, nodes[end].getY()/SCALE, 5 , PATH_COLOR);
+        pathsPane.getChildren().addAll(startCircle, endCircle);
+
         // Draw the path onto the pane
-        for (int i=0; i<bestPath.size()-1; i++) {
+        for (int i=0; i<bestPath.length-1; i++) {
 
             // Draw the new path
-            double x1 = nodeCoords[bestPath.get(i)][0];
-            double y1 = nodeCoords[bestPath.get(i)][1];
-            double x2 = nodeCoords[bestPath.get(i+1)][0];
-            double y2 = nodeCoords[bestPath.get(i+1)][1];
+            double x1 = nodes[bestPath[i]].getX();
+            double y1 = nodes[bestPath[i]].getY();
+            double x2 = nodes[bestPath[i+1]].getX();
+            double y2 = nodes[bestPath[i+1]].getY();
 
             Line temp = new Line(x1/SCALE, y1/SCALE, x2/SCALE, y2/SCALE);
             temp.setStroke(PATH_COLOR);
             temp.setStrokeWidth(2);
             pathsPane.getChildren().add(temp);
         }
-
-        pathsPane.getChildren().addAll(startCircle, endCircle);
     }
 
 
@@ -151,7 +146,7 @@ public class MapView {
      * @param y given y coordinate
      * @return the index of the closest node on the graph
      */
-    protected int getClosestNode(double x, double y) throws Graph.EmptyGraphException {
+    protected Node getClosestNode(double x, double y) throws Graph.EmptyGraphException {
         return graph.getClosestNode(x*SCALE, y*SCALE);
     }
 

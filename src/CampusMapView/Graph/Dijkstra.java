@@ -41,7 +41,7 @@ class Dijkstra {
      *
      * @return List of integers representing the points along the way
      */
-    ArrayList<Integer> findPath() {
+    Integer [] findPath() {
 
         ArrayList<Integer> currList = new ArrayList<>();    // List of all nodes working on in the current level
         ArrayList<Integer> nextList = new ArrayList<>();    // List of adjacent nodes that need to be checked next
@@ -83,7 +83,9 @@ class Dijkstra {
             curr = path.get(0);
         }
 
-        return path;
+        Integer[] arr = new Integer[path.size()];
+        arr = path.toArray(arr);
+        return arr;
     }
 
     /**

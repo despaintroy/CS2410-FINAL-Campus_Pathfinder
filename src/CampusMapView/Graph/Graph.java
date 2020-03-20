@@ -32,11 +32,13 @@ public class Graph {
             Object obj = new JSONParser().parse(new FileReader(nodesFile));
             JSONArray ja = (JSONArray) obj;
 
+            int id = 0;
             for (Object o : ja) {
                 JSONObject node = (JSONObject) o;
                 double x = Double.parseDouble(node.get("x").toString());
                 double y = Double.parseDouble(node.get("y").toString());
-                nodes.add(new Node(x, y));
+                nodes.add(new Node(x, y, id));
+                id++;
             }
 
         } catch (IOException | ParseException e) {
@@ -76,55 +78,55 @@ public class Graph {
     }
 
 
-    @Override
-    public String toString() {
-
-        String build = "";
-
-        for (Node n : nodes) {
-            build += n.toString() + '\n';
-        }
-        build += "\n\n";
-
-        for (Edge [] line : adjacency) {
-            for (Edge e : line) {
-                build += (e.isActive() ? "1" : "0") + " ";
-            }
-            build += "\n";
-        }
-        build += "\n\n";
-
-        for (Edge [] line : adjacency) {
-            for (Edge e : line) {
-                build += Math.round(e.getLength()) + "\t";
-            }
-            build += "\n";
-        }
-
-        return build;
+    /**
+     * Find a path using Dijkstra's Algorithm
+     *
+     * @param start id of start node
+     * @param end id of end node
+     * @return list of node id's that make up the path
+     */
+    public Integer [] findPath(int start, int end) {
+        Dijkstra pathFinder = new Dijkstra(adjacency, start, end);
+        return pathFinder.findPath();
     }
 
 
     /**
-     * Gets an array of node coordinates. First subscript is index, second subscript is x/y
+     * Finds the closest node to the given coordinate
      *
-     * @return array of coordinates
+     * @param x given x coordinate
+     * @param y given y coordinate
+     * @return the index of the closest node on the graph
      */
-    public double[][] getAllNodeCoords() {
-        double[][] temp = new double[nodes.size()][2];
-        for (int i=0; i<nodes.size(); i++) {
-            temp[i][0] = nodes.get(i).getX();
-            temp[i][1] = nodes.get(i).getY();
+    public Node getClosestNode(double x, double y) throws EmptyGraphException {
+
+        if (nodes.size()<1) {
+            throw new EmptyGraphException("No nodes in graph");
         }
-        return temp;
+
+        int closestNodeId = 0;
+        double closestDist = dist(new double[]{nodes.get(0).getX(), nodes.get(0).getY()}, new double[]{x, y});
+
+        for (int i=0; i<nodes.size(); i++) {
+            Node n = nodes.get(i);
+            double d = dist(new double[]{n.getX(), n.getY()}, new double[]{x, y});
+            if (d < closestDist) {
+                closestDist = d;
+                closestNodeId = i;
+            }
+        }
+        return nodes.get(closestNodeId);
     }
 
+
+    /**
+     * Returns an array of all the nodes in the graph
+     * @return
+     */
     public Node[] getAllNodes() {
-        return (Node[]) nodes.toArray();
-    }
-
-    public double[] getNodeCoord(int nodeID) {
-        return new double[]{nodes.get(nodeID).getX(), nodes.get(nodeID).getY()};
+        Node[] arr = new Node[nodes.size()];
+        arr = nodes.toArray(arr);
+        return arr;
     }
 
 
@@ -154,47 +156,6 @@ public class Graph {
 
 
     /**
-     * Find a path using Dijkstra's Algorithm
-     *
-     * @param start id of start node
-     * @param end id of end node
-     * @return list of node id's that make up the path
-     */
-    public ArrayList<Integer> findPath(int start, int end) {
-        Dijkstra pathFinder = new Dijkstra(adjacency, start, end);
-        return pathFinder.findPath();
-    }
-
-
-    /**
-     * Finds the closest node to the given coordinate
-     *
-     * @param x given x coordinate
-     * @param y given y coordinate
-     * @return the index of the closest node on the graph
-     */
-    public int getClosestNode(double x, double y) throws EmptyGraphException {
-
-        if (nodes.size()<1) {
-            throw new EmptyGraphException("No nodes in graph");
-        }
-
-        int closestNodeId = 0;
-        double closestDist = dist(new double[]{nodes.get(0).getX(), nodes.get(0).getY()}, new double[]{x, y});
-
-        for (int i=0; i<nodes.size(); i++) {
-            Node n = nodes.get(i);
-            double d = dist(new double[]{n.getX(), n.getY()}, new double[]{x, y});
-            if (d < closestDist) {
-                closestDist = d;
-                closestNodeId = i;
-            }
-        }
-        return closestNodeId;
-    }
-
-
-    /**
      * Find the distance between two points
      *
      * @param p1 point 1
@@ -203,6 +164,35 @@ public class Graph {
      */
     private double dist(double[] p1, double[] p2) {
         return Math.sqrt(Math.pow(p1[0]-p2[0], 2) + Math.pow(p1[1]-p2[1], 2));
+    }
+
+
+    @Override
+    public String toString() {
+
+        String build = "";
+
+        for (Node n : nodes) {
+            build += n.toString() + '\n';
+        }
+        build += "\n\n";
+
+        for (Edge [] line : adjacency) {
+            for (Edge e : line) {
+                build += (e.isActive() ? "1" : "0") + " ";
+            }
+            build += "\n";
+        }
+        build += "\n\n";
+
+        for (Edge [] line : adjacency) {
+            for (Edge e : line) {
+                build += Math.round(e.getLength()) + "\t";
+            }
+            build += "\n";
+        }
+
+        return build;
     }
 
 

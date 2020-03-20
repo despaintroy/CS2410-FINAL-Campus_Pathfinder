@@ -1,5 +1,6 @@
 import CampusMapView.Buildings;
 import CampusMapView.Graph.Graph;
+import CampusMapView.Graph.Node;
 import CampusMapView.MapView;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -74,8 +75,8 @@ public class PathfinderAdminController {
             y *= SCALE;
 
             try {
-                double [] closest = graph.getNodeCoord(graph.getClosestNode(x, y));
-                Circle temp = new Circle(closest[0]/SCALE, closest[1]/SCALE,2, Color.RED);
+                Node closest = graph.getClosestNode(x, y);
+                Circle temp = new Circle(closest.getX()/SCALE, closest.getY()/SCALE,2, Color.RED);
                 pathsPane.getChildren().add(temp);
             } catch (Graph.EmptyGraphException e) {
                 System.out.println("Empty graph");

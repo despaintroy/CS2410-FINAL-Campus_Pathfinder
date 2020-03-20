@@ -100,8 +100,8 @@ public class CampusPathfinderController {
                 pathsPane.setOnMouseMoved(null);
                 try {
                     drawShortestPath(
-                            getClosestNode(lastClick[0], lastClick[1]),
-                            getClosestNode(x, y)
+                            getClosestNode(lastClick[0], lastClick[1]).getId(),
+                            getClosestNode(x, y).getId()
                     );
                 } catch (Graph.EmptyGraphException e) {
                     e.printStackTrace();

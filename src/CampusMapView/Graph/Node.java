@@ -4,18 +4,24 @@ public class Node {
 
     private double x;
     private double y;
+    private int id;
 
-    Node (double x, double y) {
+    Node (double x, double y, int id) {
         this.x = x;
         this.y = y;
+        this.id = id;
     }
 
-    double getX() {
+    public double getX() {
         return x;
     }
 
-    double getY() {
+    public double getY() {
         return y;
+    }
+
+    public int getId() {
+        return id;
     }
 
     @Override
