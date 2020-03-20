@@ -18,15 +18,13 @@ public class MapView {
     private final String EDGES_FILEPATH = "data/edges.json";
     private final String NODES_FILEPATH = "data/nodes.json";
     private final String MAP_FILEPATH = "data/campus_map.png";
-    private final Color PATH_COLOR = Color.NAVY;
+    protected final Color PATH_COLOR = Color.NAVY;
 
     private final double SCALE = 1.448;
 
     private Pane masterPane;
-    private Pane pathsPane;
+    protected Pane pathsPane;
     private Graph graph;
-
-    private double[][] clickLocations = {{-1,-1},{-1,-1}};
 
 
     /**
@@ -114,7 +112,7 @@ public class MapView {
      * @param start building name to start from
      * @param end building name to end at
      */
-    void drawShortestPath(int start, int end) {
+    public void drawShortestPath(int start, int end) {
 
         ArrayList<Integer> bestPath = graph.findPath(start, end);
 
@@ -153,47 +151,10 @@ public class MapView {
      * @param y given y coordinate
      * @return the index of the closest node on the graph
      */
-    int getClosestNode(double x, double y) throws Graph.EmptyGraphException {
+    protected int getClosestNode(double x, double y) throws Graph.EmptyGraphException {
         return graph.getClosestNode(x*SCALE, y*SCALE);
     }
 
-
-    // TODO: This class handles clicks on the map.
-    public void click(double x, double y) {
-
-        // First Click
-        clearPaths();
-
-        if (clickLocations[0][0] == -1) {
-            clickLocations[0] = new double[]{x, y};
-            pathsPane.setOnMouseMoved(event -> {
-                pathsPane.getChildren().clear();
-                Line myLine = new Line(x, y, event.getX(), event.getY());
-                myLine.setStroke(PATH_COLOR);
-                myLine.setStrokeWidth(2);
-                pathsPane.getChildren().add(myLine);
-            });
-        }
-        // Second Click
-        else if (clickLocations[1][0] == -1) {
-            clickLocations[1] = new double[]{x, y};
-            pathsPane.setOnMouseMoved(null);
-            try {
-                drawShortestPath(
-                    getClosestNode(
-                        clickLocations[0][0],
-                        clickLocations[0][1]
-                    ),
-                    getClosestNode(
-                        clickLocations[1][0],
-                        clickLocations[1][1]
-                    ));
-            } catch (Graph.EmptyGraphException e) {
-                e.printStackTrace();
-            }
-            clickLocations = new double[][]{{-1,-1},{-1,-1}};
-        }
-    }
 
     public void clearPaths() {
         pathsPane.getChildren().clear();

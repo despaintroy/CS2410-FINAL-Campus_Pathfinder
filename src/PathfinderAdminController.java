@@ -11,10 +11,9 @@ import javafx.scene.text.Text;
 
 public class PathfinderAdminController {
 
-    private MapView map;
+    private AdminMapView map;
     static final int TOP_HEIGHT        = 35;
     static final int BOTTOM_HEIGHT     = 35;
-    static final int LEFT_WIDTH        = 180;
     static final int VIEWPORT_WIDTH    = 967;
     static final int VIEWPORT_HEIGHT   = 683;
 
@@ -37,12 +36,12 @@ public class PathfinderAdminController {
         bottomBar.setPrefHeight(BOTTOM_HEIGHT);
 
         // Construct the map view
-        map = new MapView(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+        map = new AdminMapView(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
         centerPane.getChildren().setAll(map.getMasterPane());
 
         // Handle clicks on the graph
         centerPane.setOnMouseClicked(e -> {
-            map.click(e.getX(), e.getY());
+            System.out.println("Click x:" + (e.getX() + "\ty:" + e.getY()));
         });
 
         // Populate the Combo Boxes
@@ -57,5 +56,19 @@ public class PathfinderAdminController {
                 map.showAllPaths();
             }
         });
+    }
+
+
+    static class AdminMapView extends MapView {
+
+        /**
+         * Initializes a MapView.MapView with just an image to display for the background.
+         *
+         * @param viewport_width  width of pane to create
+         * @param viewport_height height of pane to create
+         */
+        public AdminMapView(int viewport_width, int viewport_height) {
+            super(viewport_width, viewport_height);
+        }
     }
 }
