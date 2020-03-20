@@ -110,7 +110,7 @@ public class Graph {
      *
      * @return array of coordinates
      */
-    public double[][] getNodeCoords() {
+    public double[][] getAllNodeCoords() {
         double[][] temp = new double[nodes.size()][2];
         for (int i=0; i<nodes.size(); i++) {
             temp[i][0] = nodes.get(i).getX();
@@ -119,13 +119,21 @@ public class Graph {
         return temp;
     }
 
+    public Node[] getAllNodes() {
+        return (Node[]) nodes.toArray();
+    }
+
+    public double[] getNodeCoord(int nodeID) {
+        return new double[]{nodes.get(nodeID).getX(), nodes.get(nodeID).getY()};
+    }
+
 
     /**
      * Gets a list of edge startpoints and endpoints {x1, y1, x2, y2}
      *
      * @return array of edge points
      */
-    public ArrayList<Double[]> getEdgeCoords() {
+    public ArrayList<Double[]> getAllEdgeCoords() {
         ArrayList<Double[]> temp = new ArrayList<>();
         for (int i=0; i<adjacency.length; i++) {
             for (int j=0; j<adjacency[i].length; j++) {

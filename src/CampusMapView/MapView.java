@@ -20,11 +20,11 @@ public class MapView {
     private final String MAP_FILEPATH = "data/campus_map.png";
     protected final Color PATH_COLOR = Color.NAVY;
 
-    private final double SCALE = 1.448;
+    protected final double SCALE = 1.448;
 
     private Pane masterPane;
     protected Pane pathsPane;
-    private Graph graph;
+    protected Graph graph;
 
 
     /**
@@ -63,8 +63,8 @@ public class MapView {
 
         clearPaths();
 
-        double [][] nodeCoords = graph.getNodeCoords();
-        ArrayList<Double[]> edgeCoords = graph.getEdgeCoords();
+        double [][] nodeCoords = graph.getAllNodeCoords();
+        ArrayList<Double[]> edgeCoords = graph.getAllEdgeCoords();
 
         for (double[] coord : nodeCoords) {
 
@@ -116,7 +116,7 @@ public class MapView {
 
         ArrayList<Integer> bestPath = graph.findPath(start, end);
 
-        double [][] nodeCoords = graph.getNodeCoords();
+        double [][] nodeCoords = graph.getAllNodeCoords();
 
         // Mark with circles the endpoints
         Circle startCircle = new Circle(nodeCoords[start][0]/SCALE, nodeCoords[start][1]/SCALE, 5 , PATH_COLOR);

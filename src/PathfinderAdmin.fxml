@@ -22,7 +22,6 @@
             <ComboBox fx:id="actionChooser" id="action-chooser">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="Pathfinder"/>
                         <String fx:value="Tag Buildings"/>
                     </FXCollections>
                 </items>

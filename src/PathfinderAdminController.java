@@ -1,12 +1,12 @@
 import CampusMapView.Buildings;
+import CampusMapView.Graph.Graph;
 import CampusMapView.MapView;
-import Utilities.Weather;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 public class PathfinderAdminController {
@@ -39,21 +39,18 @@ public class PathfinderAdminController {
         map = new AdminMapView(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
         centerPane.getChildren().setAll(map.getMasterPane());
 
-        // Handle clicks on the graph
-        centerPane.setOnMouseClicked(e -> {
-            System.out.println("Click x:" + (e.getX() + "\ty:" + e.getY()));
-        });
-
         // Populate the Combo Boxes
         buildingActionChooser.getItems().addAll(Buildings.getCodes());
 
         // Handle changes to the action combo box
         actionChooser.setOnAction(event -> {
-            if (actionChooser.getValue().equals("Pathfinder")) {
-                map.clearPaths();
-            }
-            else if (actionChooser.getValue().equals("Tag Buildings")) {
+            if (actionChooser.getValue().equals("Tag Buildings")) {
                 map.showAllPaths();
+
+                // Clicks on the graph
+                centerPane.setOnMouseClicked(e -> {
+                    map.click(e.getX(), e.getY());
+                });
             }
         });
     }
@@ -69,6 +66,20 @@ public class PathfinderAdminController {
          */
         public AdminMapView(int viewport_width, int viewport_height) {
             super(viewport_width, viewport_height);
+        }
+
+        void click(double x, double y) {
+
+            x *= SCALE;
+            y *= SCALE;
+
+            try {
+                double [] closest = graph.getNodeCoord(graph.getClosestNode(x, y));
+                Circle temp = new Circle(closest[0]/SCALE, closest[1]/SCALE,2, Color.RED);
+                pathsPane.getChildren().add(temp);
+            } catch (Graph.EmptyGraphException e) {
+                System.out.println("Empty graph");
+            }
         }
     }
 }
