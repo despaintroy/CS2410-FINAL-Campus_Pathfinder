@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+
+<BorderPane fx:controller="PathfinderAdminController"
+            xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2"
+            styleClass="root">
+
+    <top>
+        <HBox id="top-bar" fx:id="topBar" alignment="CENTER_RIGHT">
+            <Text id="temp-readout" fx:id="tempReadout">Current Temperature</Text>
+        </HBox>
+    </top>
+
+    <bottom>
+        <HBox id="bottom-bar" fx:id="bottomBar" alignment="CENTER_LEFT">
+            <ComboBox fx:id="actionChooser" id="action-chooser">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Pathfinder"/>
+                        <String fx:value="Tag Buildings"/>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+            <ComboBox fx:id="buildingActionChooser" promptText="Choose building" />
+        </HBox>
+    </bottom>
+
+    <center>
+        <Pane id="center-pane" fx:id="centerPane"/>
+    </center>
+
+    <stylesheets>
+        <URL value="@CampusPathfinder.css" />
+    </stylesheets>
+
+</BorderPane>

@@ -1,5 +1,5 @@
-import CampusMapView.MapView;
 import CampusMapView.Buildings;
+import CampusMapView.MapView;
 import Utilities.Weather;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -9,7 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class CampusPathfinderController {
+public class PathfinderAdminController {
 
     private MapView map;
     static final int TOP_HEIGHT        = 35;
@@ -21,17 +21,11 @@ public class CampusPathfinderController {
     @FXML
     public Pane centerPane;
     public HBox topBar;
-    public VBox leftBar;
-    public Button findPathSubmit;
+    public HBox bottomBar;
     public Text tempReadout;
-    public ComboBox<String> buildingFrom;
-    public ComboBox<String> buildingTo;
+    public ComboBox<String> actionChooser;
+    public ComboBox<String> buildingActionChooser;
 
-    @FXML
-    public void findPathClicked() {
-        map.drawShortestPath(buildingFrom.getValue(), buildingTo.getValue());
-        centerPane = map.getMasterPane();
-    }
 
     @FXML
     public void initialize() {
@@ -40,15 +34,7 @@ public class CampusPathfinderController {
 
         // Set the dimensions of the viewport
         topBar.setPrefHeight(TOP_HEIGHT);
-        leftBar.setPrefWidth(LEFT_WIDTH);
-
-        // Display the temperature
-        try {
-            tempReadout.setText("Temperature is " + Math.round(Weather.getTempF()) + " ºF");
-        } catch (Weather.CannotGetTempException e) {
-            tempReadout.setText("Temperature is -- ºF");
-            e.printStackTrace();
-        }
+        bottomBar.setPrefHeight(BOTTOM_HEIGHT);
 
         // Construct the map view
         map = new MapView(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
@@ -60,7 +46,16 @@ public class CampusPathfinderController {
         });
 
         // Populate the Combo Boxes
-        buildingFrom.getItems().addAll(Buildings.getCodes());
-        buildingTo.getItems().addAll(Buildings.getCodes());
+        buildingActionChooser.getItems().addAll(Buildings.getCodes());
+
+        // Handle changes to the action combo box
+        actionChooser.setOnAction(event -> {
+            if (actionChooser.getValue().equals("Pathfinder")) {
+                map.clearPaths();
+            }
+            else if (actionChooser.getValue().equals("Tag Buildings")) {
+                map.showAllPaths();
+            }
+        });
     }
 }
