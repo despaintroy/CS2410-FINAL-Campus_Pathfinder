@@ -4,7 +4,7 @@ USU Campus Pathfinder finds the fastest walking path between any buildings on US
 
 Every USU student has to think about how to get to their next class. This program is for the students who need to find the absolute shortest, most efficient path between any two buildings. 
 
-####Features  
+_Features_
 * Select two buildings and find the absolute shortest walking distance between them
 * Display the path on a campus map
 * Prioritize walking indoors rather than shortest path. Great for freezing cold and windy mornings.
