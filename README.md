@@ -12,10 +12,10 @@ __Features__
 
 ## Installation
 
-TODO: JSON.simple
+TODO: installation of JSON.simple
 
 ```bash
-installation instructions
+TODO: installation instructions
 ```
 
 ## Usage
@@ -27,8 +27,6 @@ TODO: Insert animated gifs showing features
 The USU Pathfinder application works by applying Dijkstra's algorithm to an undirected graph. Edges on the graph contain their length and also whether they are indoors or outdoors. Nodes on the graph can be tagged if they are an entrance/exit of a specific building. When prioritizing walking indoors, Dijkstra's applies extra weight to edges that outdoors. 
 
 ## Support
-
-Contact me with any questions!  
 
 > Troy DeSpain  
 > [despaintroy@gmail.com](mailto:despaintroy@gmail.com)
