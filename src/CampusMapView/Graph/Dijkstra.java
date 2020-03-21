@@ -88,6 +88,7 @@ class Dijkstra {
         return arr;
     }
 
+    // TODO: Make this a lot more faster by just checking the rows and columns in the adjacency
     /**
      * Finds all nodes directly connected to a specified node
      *

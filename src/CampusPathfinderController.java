@@ -86,6 +86,7 @@ public class CampusPathfinderController {
             // First Click
             if (lastClick[0] == -1) {
                 lastClick = new double[]{x, y};
+                // Draw a line extending from first click to pointer
                 pathsPane.setOnMouseMoved(event -> {
                     clearPaths();
                     Line myLine = new Line(x, y, event.getX(), event.getY());
