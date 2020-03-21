@@ -44,6 +44,8 @@ class Dijkstra {
      */
     Integer [] findPath() {
 
+        long startTime = System.currentTimeMillis();
+
         ArrayList<Integer> currList = new ArrayList<>();    // List of all nodes working on in the current level
         ArrayList<Integer> nextList = new ArrayList<>();    // List of adjacent nodes that need to be checked next
 
@@ -95,7 +97,13 @@ class Dijkstra {
 
                 int curr = end;
                 path.add(end);
+
                 for (int level = matrix.length - 1; level >= 0; level--) {
+//
+                    //TODO: Why would it be -1?
+                    if (curr==-1) {
+                        break;
+                    }
                     if (matrix[level][curr].pred == path.get(0)) {
                         break;
                     }
@@ -128,17 +136,15 @@ class Dijkstra {
 
         ArrayList<Integer> ints = new ArrayList<>();
 
-        for (int i = 0; i< adjacency.length; i++) {
-            for (int j=0; j<i; j++){
-                if (adjacency[i][j].isActive()){
+        for (int i=id+1; i<adjacency.length; i++) {
+            if (adjacency[i][id].isActive()) {
+                ints.add(i);
+            }
+        }
 
-                    if (i==id) {
-                        ints.add(j);
-                    }
-                    if (j==id){
-                        ints.add(i);
-                    }
-                }
+        for (int i=0; i<id; i++) {
+            if (adjacency[id][i].isActive()) {
+                ints.add(i);
             }
         }
 
