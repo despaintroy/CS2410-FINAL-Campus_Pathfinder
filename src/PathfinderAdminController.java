@@ -1,6 +1,7 @@
 import CampusMapView.Buildings;
 import CampusMapView.Graph.Graph;
 import CampusMapView.Graph.Node;
+import CampusMapView.Graph.Edge;
 import CampusMapView.MapView;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -8,7 +9,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
+
+import java.util.ArrayList;
 
 public class PathfinderAdminController {
 
@@ -59,6 +63,8 @@ public class PathfinderAdminController {
 
     static class AdminMapView extends MapView {
 
+        protected final Color BUILDING_COLOR = Color.RED;
+
         /**
          * Initializes a MapView.MapView with just an image to display for the background.
          *
@@ -80,6 +86,39 @@ public class PathfinderAdminController {
                 pathsPane.getChildren().add(temp);
             } catch (Graph.EmptyGraphException e) {
                 System.out.println("Empty graph");
+            }
+        }
+
+
+        /**
+         * Draw all paths and nodes from the graph
+         */
+        public void showAllPaths() {
+
+            clearPaths();
+
+            Node[] nodes = graph.getAllNodes();
+            Edge[] edgeCoords = graph.getAllEdges();
+
+            for (Node n : nodes) {
+                Circle temp = new Circle(n.getX()/SCALE, n.getY()/SCALE,2, PATH_COLOR);
+                pathsPane.getChildren().add(temp);
+            }
+
+            for (Edge e : edgeCoords) {
+
+                if (!e.isActive()) {
+                    continue;
+                }
+
+                double x1 = e.getN1().getX();
+                double y1 = e.getN1().getY();
+                double x2 = e.getN2().getX();
+                double y2 = e.getN2().getY();
+
+                Line temp = new Line(x1/SCALE, y1/SCALE, x2/SCALE, y2/SCALE);
+                temp.setStroke(PATH_COLOR);
+                pathsPane.getChildren().add(temp);
             }
         }
     }

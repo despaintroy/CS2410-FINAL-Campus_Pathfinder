@@ -37,7 +37,7 @@ public class Graph {
                 JSONObject node = (JSONObject) o;
                 double x = Double.parseDouble(node.get("x").toString());
                 double y = Double.parseDouble(node.get("y").toString());
-                nodes.add(new Node(x, y, id));
+                nodes.add(new Node(x, y, id, false));
                 id++;
             }
 
@@ -49,7 +49,7 @@ public class Graph {
         adjacency = new Edge[nodes.size()][nodes.size()];
 
         for (Edge[] line : adjacency) {
-            Arrays.fill(line, new Edge(false, -1));
+            Arrays.fill(line, new Edge(false, -1, null, null));
         }
 
         try {
@@ -67,7 +67,7 @@ public class Graph {
                     // Create the adjacency matrix
                     double[] p1 = {nodes.get(n1).getX(), nodes.get(n1).getY()};
                     double[] p2 = {nodes.get(n2).getX(), nodes.get(n2).getY()};
-                    adjacency[n1][n2] = new Edge(true, dist(p1, p2));
+                    adjacency[n1][n2] = new Edge(true, dist(p1, p2), nodes.get(n1), nodes.get(n2));
                 }
 
             }
@@ -121,6 +121,7 @@ public class Graph {
 
     /**
      * Returns an array of all the nodes in the graph
+     *
      * @return
      */
     public Node[] getAllNodes() {
@@ -131,27 +132,23 @@ public class Graph {
 
 
     /**
-     * Gets a list of edge startpoints and endpoints {x1, y1, x2, y2}
+     * Returns an array of all the edges in the graph
      *
-     * @return array of edge points
+     * @return
      */
-    public ArrayList<Double[]> getAllEdgeCoords() {
-        ArrayList<Double[]> temp = new ArrayList<>();
+    public Edge[] getAllEdges() {
+
+        ArrayList<Edge> tempEdges = new ArrayList<>();
+
         for (int i=0; i<adjacency.length; i++) {
             for (int j=0; j<adjacency[i].length; j++) {
-
-                if (adjacency[i][j].isActive()) {
-                    Double[] line = new Double[4];
-                    line[0] = nodes.get(i).getX();
-                    line[1] = nodes.get(i).getY();
-                    line[2] = nodes.get(j).getX();
-                    line[3] = nodes.get(j).getY();
-
-                    temp.add(line);
-                }
+                tempEdges.add(adjacency[i][j]);
             }
         }
-        return temp;
+
+        Edge[] arr = new Edge[tempEdges.size()];
+        arr = tempEdges.toArray(arr);
+        return arr;
     }
 
 

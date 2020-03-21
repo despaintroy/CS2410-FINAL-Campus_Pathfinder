@@ -5,11 +5,13 @@ public class Node {
     private double x;
     private double y;
     private int id;
+    private boolean indoors;
 
-    Node (double x, double y, int id) {
+    Node (double x, double y, int id, boolean indoors) {
         this.x = x;
         this.y = y;
         this.id = id;
+        this.indoors = indoors;
     }
 
     public double getX() {
@@ -22,6 +24,10 @@ public class Node {
 
     public int getId() {
         return id;
+    }
+
+    public boolean isIndoors() {
+        return indoors;
     }
 
     @Override

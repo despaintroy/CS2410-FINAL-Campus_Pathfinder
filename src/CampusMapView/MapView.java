@@ -58,34 +58,6 @@ public class MapView {
 
 
     /**
-     * Draw all paths and nodes from the graph
-     */
-    public void showAllPaths() {
-
-        clearPaths();
-
-        Node[] nodes = graph.getAllNodes();
-        ArrayList<Double[]> edgeCoords = graph.getAllEdgeCoords();
-
-        for (Node n : nodes) {
-            Circle temp = new Circle(n.getX()/SCALE, n.getY()/SCALE,2, PATH_COLOR);
-            pathsPane.getChildren().add(temp);
-        }
-
-        for (Double[] coords : edgeCoords) {
-            double x1 = coords[0];
-            double y1 = coords[1];
-            double x2 = coords[2];
-            double y2 = coords[3];
-
-            Line temp = new Line(x1/SCALE, y1/SCALE, x2/SCALE, y2/SCALE);
-            temp.setStroke(PATH_COLOR);
-            pathsPane.getChildren().add(temp);
-        }
-    }
-
-
-    /**
      * Draw the shortest path between two nodes
      *
      * @param from the name of the building to start at
