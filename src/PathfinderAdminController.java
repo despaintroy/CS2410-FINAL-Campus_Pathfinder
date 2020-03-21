@@ -12,8 +12,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 
-import java.util.ArrayList;
-
 public class PathfinderAdminController {
 
     private AdminMapView map;
@@ -61,7 +59,7 @@ public class PathfinderAdminController {
     }
 
 
-    static class AdminMapView extends MapView {
+    class AdminMapView extends MapView {
 
         protected final Color BUILDING_COLOR = Color.RED;
 
@@ -82,11 +80,22 @@ public class PathfinderAdminController {
 
             try {
                 Node closest = graph.getClosestNode(x, y);
-                Circle temp = new Circle(closest.getX()/SCALE, closest.getY()/SCALE,2, Color.RED);
-                pathsPane.getChildren().add(temp);
+
+                // TODO: Need a way to highlight all building nodes, and just the nodes of a specific building
+                if (closest.isIndoors()) {
+                    closest.setIndoors(false);
+                    closest.setBuildingCode("");
+                }
+                else {
+                    closest.setIndoors(true);
+                    String building = buildingActionChooser.getValue();
+                    closest.setBuildingCode(building == null ? "" : building);
+                }
             } catch (Graph.EmptyGraphException e) {
                 System.out.println("Empty graph");
             }
+
+            showAllPaths();
         }
 
 
@@ -100,24 +109,24 @@ public class PathfinderAdminController {
             Node[] nodes = graph.getAllNodes();
             Edge[] edgeCoords = graph.getAllEdges();
 
-            for (Node n : nodes) {
-                Circle temp = new Circle(n.getX()/SCALE, n.getY()/SCALE,2, PATH_COLOR);
-                pathsPane.getChildren().add(temp);
+            // Draw each edge
+            for (Edge e : edgeCoords) {
+                if (e.isActive()) {
+                    double x1 = e.getN1().getX();
+                    double y1 = e.getN1().getY();
+                    double x2 = e.getN2().getX();
+                    double y2 = e.getN2().getY();
+
+                    Line temp = new Line(x1/SCALE, y1/SCALE, x2/SCALE, y2/SCALE);
+                    temp.setStroke(e.isIndoors() ? BUILDING_COLOR : PATH_COLOR);
+                    pathsPane.getChildren().add(temp);
+                }
             }
 
-            for (Edge e : edgeCoords) {
-
-                if (!e.isActive()) {
-                    continue;
-                }
-
-                double x1 = e.getN1().getX();
-                double y1 = e.getN1().getY();
-                double x2 = e.getN2().getX();
-                double y2 = e.getN2().getY();
-
-                Line temp = new Line(x1/SCALE, y1/SCALE, x2/SCALE, y2/SCALE);
-                temp.setStroke(PATH_COLOR);
+            // Draw each node
+            for (Node n : nodes) {
+                Circle temp = new Circle(n.getX()/SCALE, n.getY()/SCALE,2);
+                temp.setFill(n.isIndoors() ? BUILDING_COLOR : PATH_COLOR);
                 pathsPane.getChildren().add(temp);
             }
         }

@@ -6,12 +6,24 @@ public class Node {
     private double y;
     private int id;
     private boolean indoors;
+    private String buildingCode;
 
     Node (double x, double y, int id, boolean indoors) {
         this.x = x;
         this.y = y;
         this.id = id;
         this.indoors = indoors;
+        this.buildingCode = "";
+    }
+
+    // TODO: Create a method to determine if the node is a building entrance
+
+    public String getBuildingCode() {
+        return buildingCode;
+    }
+
+    public void setBuildingCode(String buildingCode) {
+        this.buildingCode = buildingCode;
     }
 
     public double getX() {
@@ -24,6 +36,10 @@ public class Node {
 
     public int getId() {
         return id;
+    }
+
+    public void setIndoors(boolean indoors) {
+        this.indoors = indoors;
     }
 
     public boolean isIndoors() {

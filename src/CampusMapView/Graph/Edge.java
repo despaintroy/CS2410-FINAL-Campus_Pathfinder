@@ -19,7 +19,7 @@ public class Edge {
     }
 
     // TODO: This is indoors if both of the nodes it connects are indoors
-    boolean isIndoors() {
+    public boolean isIndoors() {
         return n1.isIndoors() && n2.isIndoors();
     }
 
