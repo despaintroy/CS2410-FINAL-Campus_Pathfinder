@@ -27,6 +27,9 @@
                 </items>
             </ComboBox>
             <ComboBox fx:id="buildingActionChooser" promptText="Choose building" />
+            <Button fx:id="saveButton">
+                Save
+            </Button>
         </HBox>
     </bottom>
 

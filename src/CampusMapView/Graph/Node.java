@@ -8,12 +8,12 @@ public class Node {
     private boolean indoors;
     private String buildingCode;
 
-    Node (double x, double y, int id, boolean indoors) {
+    Node (double x, double y, int id, String buildingCode) {
         this.x = x;
         this.y = y;
         this.id = id;
-        this.indoors = indoors;
-        this.buildingCode = "";
+        this.indoors = buildingCode.length()>0;
+        this.buildingCode = buildingCode;
     }
 
     // TODO: Create a method to determine if the node is a building entrance

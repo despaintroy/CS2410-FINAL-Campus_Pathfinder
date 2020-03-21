@@ -4,6 +4,7 @@ import CampusMapView.Graph.Node;
 import CampusMapView.Graph.Edge;
 import CampusMapView.MapView;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -11,6 +12,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class PathfinderAdminController {
 
@@ -21,6 +27,7 @@ public class PathfinderAdminController {
     static final int VIEWPORT_HEIGHT   = 683;
 
     @FXML
+    public Button saveButton;
     public Pane centerPane;
     public HBox topBar;
     public HBox bottomBar;
@@ -56,6 +63,9 @@ public class PathfinderAdminController {
                 });
             }
         });
+
+        // Handle button clicks
+        saveButton.setOnAction(event -> map.save());
     }
 
 
@@ -129,6 +139,50 @@ public class PathfinderAdminController {
                 temp.setFill(n.isIndoors() ? BUILDING_COLOR : PATH_COLOR);
                 pathsPane.getChildren().add(temp);
             }
+        }
+
+        public void save() {
+
+            System.out.println("Map will be saved to file.");
+
+            Node [] nodes = graph.getAllNodes();
+            Edge [] edges = graph.getAllEdges();
+
+            // Write nodes to file
+            JSONArray nodeListJSON = new JSONArray();
+            for (Node n : nodes) {
+                JSONObject nodeJSON = new JSONObject();
+                nodeJSON.put("x",n.getX());
+                nodeJSON.put("y",n.getY());
+                nodeJSON.put("in",n.isIndoors());
+                nodeJSON.put("build",n.getBuildingCode());
+                nodeListJSON.add(nodeJSON);
+            }
+            try (FileWriter file = new FileWriter("data/nodes.json")) {
+                file.write(nodeListJSON.toJSONString());
+                file.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Nodes have been saved to JSON");
+
+            // Write edges to file
+            JSONArray edgeListJSON = new JSONArray();
+            for (Edge e : edges) {
+                JSONObject edgeJSON = new JSONObject();
+                if(e.isActive()) {
+                    edgeJSON.put("n1", e.getN1().getId());
+                    edgeJSON.put("n2", e.getN2().getId());
+                    edgeListJSON.add(edgeJSON);
+                }
+            }
+            try (FileWriter file = new FileWriter("data/edges.json")) {
+                file.write(edgeListJSON.toJSONString());
+                file.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Edges have been saved to JSON");
         }
     }
 }

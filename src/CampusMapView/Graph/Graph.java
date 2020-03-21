@@ -37,7 +37,8 @@ public class Graph {
                 JSONObject node = (JSONObject) o;
                 double x = Double.parseDouble(node.get("x").toString());
                 double y = Double.parseDouble(node.get("y").toString());
-                nodes.add(new Node(x, y, id, false));
+                String buildingCode = node.get("build").toString();
+                nodes.add(new Node(x, y, id, buildingCode));
                 id++;
             }
 
@@ -60,16 +61,11 @@ public class Graph {
                 JSONObject node = (JSONObject) o;
                 int n1 = Integer.parseInt(node.get("n1").toString());
                 int n2 = Integer.parseInt(node.get("n2").toString());
-                boolean active = Boolean.parseBoolean(node.get("active").toString());
 
-                if (active) {
-
-                    // Create the adjacency matrix
-                    double[] p1 = {nodes.get(n1).getX(), nodes.get(n1).getY()};
-                    double[] p2 = {nodes.get(n2).getX(), nodes.get(n2).getY()};
-                    adjacency[n1][n2] = new Edge(true, dist(p1, p2), nodes.get(n1), nodes.get(n2));
-                }
-
+                // Add the edges to the adjacency matrix
+                double[] p1 = {nodes.get(n1).getX(), nodes.get(n1).getY()};
+                double[] p2 = {nodes.get(n2).getX(), nodes.get(n2).getY()};
+                adjacency[n1][n2] = new Edge(true, dist(p1, p2), nodes.get(n1), nodes.get(n2));
             }
 
         } catch (IOException | ParseException e) {
