@@ -1,31 +1,37 @@
 package CampusMapView.Graph;
 
-class Edge {
+public class Edge {
 
     private double length;
     private boolean active;
-    private boolean indoors;
+    private Node n1;
+    private Node n2;
 
-    // TODO: add indoors to constructor
-    Edge(boolean active, double length) {
+    Edge(boolean active, double length, Node n1, Node n2) {
         this.active = active;
         this.length = length;
-        this.indoors = false;
+        this.n1 = n1;
+        this.n2 = n2;
     }
 
     double getLength() {
         return length;
     }
 
+    // TODO: This is indoors if both of the nodes it connects are indoors
     boolean isIndoors() {
-        return this.indoors;
+        return n1.isIndoors() && n2.isIndoors();
     }
 
-    boolean isActive() {
+    public boolean isActive() {
         return active;
     }
 
-    void setIndoors(Boolean indoors) {
-        this.indoors = indoors;
+    public Node getN1() {
+        return n1;
+    }
+
+    public Node getN2() {
+        return n2;
     }
 }
