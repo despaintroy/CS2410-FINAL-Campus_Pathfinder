@@ -12,6 +12,7 @@ import javafx.scene.shape.Line;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class MapView {
 
@@ -67,10 +68,24 @@ public class MapView {
         System.out.println("From (" + from + ") to (" + to + ")");
 
         // Find the node of the building, then call the other drawShortestPath function
-        int start = Buildings.getBuildNodeId(from);
-        int end = Buildings.getBuildNodeId(to);
+        ArrayList<Integer> start = Buildings.getNodes(from);
+        ArrayList<Integer> end = Buildings.getNodes(to);
 
         drawShortestPath(start, end);
+    }
+
+
+    /**
+     * Draw the shortest path between two nodes
+     *
+     * @param from the name of the building to start at
+     * @param to the name of the building to end at
+     */
+    public void drawShortestPath(int from, int to) {
+
+        ArrayList<Integer> startList = new ArrayList<Integer>(){{add(from);}};
+        ArrayList<Integer> endList = new ArrayList<Integer>(){{add(to);}};
+        drawShortestPath(startList, endList);
     }
 
 
@@ -80,7 +95,7 @@ public class MapView {
      * @param start building name to start from
      * @param end building name to end at
      */
-    public void drawShortestPath(int start, int end) {
+    public void drawShortestPath(ArrayList<Integer> start, ArrayList<Integer> end) {
 
         Integer[] bestPath = graph.findPath(start, end);
         Node[] nodes = graph.getAllNodes();
@@ -89,8 +104,10 @@ public class MapView {
         clearPaths();
 
         // Mark with circles the endpoints
-        Circle startCircle = new Circle(nodes[start].getX()/SCALE, nodes[start].getY()/SCALE, 5 , PATH_COLOR);
-        Circle endCircle = new Circle(nodes[end].getX()/SCALE, nodes[end].getY()/SCALE, 5 , PATH_COLOR);
+        int startNode = bestPath[0];
+        int endNode = bestPath[bestPath.length-1];
+        Circle startCircle = new Circle(nodes[startNode].getX()/SCALE, nodes[startNode].getY()/SCALE, 5 , PATH_COLOR);
+        Circle endCircle = new Circle(nodes[endNode].getX()/SCALE, nodes[endNode].getY()/SCALE, 5 , PATH_COLOR);
         pathsPane.getChildren().addAll(startCircle, endCircle);
 
         // Draw the path onto the pane

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import CampusMapView.Buildings;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -38,7 +39,11 @@ public class Graph {
                 double x = Double.parseDouble(node.get("x").toString());
                 double y = Double.parseDouble(node.get("y").toString());
                 String buildingCode = node.get("build").toString();
-                nodes.add(new Node(x, y, id, buildingCode));
+                Node newNode = new Node(x, y, id, buildingCode);
+                if (buildingCode.length()>0) {
+                    Buildings.addNode(buildingCode, newNode);
+                }
+                nodes.add(newNode);
                 id++;
             }
 
@@ -82,6 +87,20 @@ public class Graph {
      * @return list of node id's that make up the path
      */
     public Integer [] findPath(int start, int end) {
+        ArrayList<Integer> startList = new ArrayList<Integer>(){{add(start);}};
+        ArrayList<Integer> endList = new ArrayList<Integer>(){{add(end);}};
+        return findPath(startList, endList);
+    }
+
+
+    /**
+     * Find a path using Dijkstra's Algorithm
+     *
+     * @param start id of start node
+     * @param end id of end node
+     * @return list of node id's that make up the path
+     */
+    public Integer [] findPath(ArrayList<Integer> start, ArrayList<Integer> end) {
         Dijkstra pathFinder = new Dijkstra(adjacency, start, end);
         return pathFinder.findPath();
     }

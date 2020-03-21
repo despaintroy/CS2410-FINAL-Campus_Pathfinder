@@ -6,8 +6,8 @@ class Dijkstra {
 
     private Edge [][] adjacency;    // Adjacency matrix that holds distances between nodes
     private Info [][] matrix;       // 2D Array of Info objects for running Dijkstra's algorithm
-    private int start;              // ID of the starting node
-    private int destination;        // ID of the destination node
+    private ArrayList<Integer> start;              // ID of the starting node
+    private ArrayList<Integer> destination;        // ID of the destination node
 
 
     /**
@@ -18,7 +18,8 @@ class Dijkstra {
      * @param destination Index of the end node
      *                    .
      */
-    Dijkstra(Edge[][] graph, int start, int destination) {
+    // TODO: Make this using arrays instead
+    Dijkstra(Edge[][] graph, ArrayList<Integer> start, ArrayList<Integer> destination) {
 
         this.adjacency = graph;
         this.start = start;
@@ -46,45 +47,73 @@ class Dijkstra {
         ArrayList<Integer> currList = new ArrayList<>();    // List of all nodes working on in the current level
         ArrayList<Integer> nextList = new ArrayList<>();    // List of adjacent nodes that need to be checked next
 
-        // Beginning at the start node
-        currList.add(start);
-        matrix[0][start] = new Info(start, 0);
+//        int begin = start.get(0);
+//        int end = destination.get(0);
 
-        for (int level=1; level<matrix.length; level++) {
+        ArrayList<Integer> bestPath = new ArrayList<>();
+        double shortestDistance = Double.MAX_VALUE;
 
-            // Copy the Info objects down from the previous level
-            matrix[level] = matrix[level - 1].clone();
+        int totalCalculations = start.size() * destination.size();
+        int counter = 1;
 
-            // For each current node, get adjacent nodes, then update their info if we've found a shorter distance
-            for (int curr : currList) {
+        for (int begin : start) {
+            for (int end : destination) {
 
-                ArrayList<Integer> conns = getAdjacentNodes(curr);
+                System.out.print("Calculating " + counter++ + "/" + totalCalculations + "...\r");
 
-                for (int c : conns) {
-                    if (matrix[level][c].distance > matrix[level - 1][curr].distance + getAdjacency(curr, c).getLength()) {
-                        matrix[level][c] = new Info(curr, matrix[level - 1][curr].distance + getAdjacency(curr, c).getLength());
-                        nextList.add(c);
+                // Beginning at the start node
+                currList.add(begin);
+                matrix[0][begin] = new Info(begin, 0);
+
+                for (int level = 1; level < matrix.length; level++) {
+
+                    // Copy the Info objects down from the previous level
+                    matrix[level] = matrix[level - 1].clone();
+
+                    // For each current node, get adjacent nodes, then update their info if we've found a shorter distance
+                    for (int curr : currList) {
+
+                        ArrayList<Integer> conns = getAdjacentNodes(curr);
+
+                        for (int c : conns) {
+                            if (matrix[level][c].distance > matrix[level - 1][curr].distance + getAdjacency(curr, c).getLength()) {
+                                matrix[level][c] = new Info(curr, matrix[level - 1][curr].distance + getAdjacency(curr, c).getLength());
+                                nextList.add(c);
+                            }
+                        }
                     }
+
+                    currList = nextList;
+                    nextList = new ArrayList<>();
+                }
+
+                // Store the distance
+                double pathDistance = matrix[matrix.length - 1][end].distance;
+
+                // Assemble the path from the start to destination nodes
+                ArrayList<Integer> path = new ArrayList<>();
+
+                int curr = end;
+                path.add(end);
+                for (int level = matrix.length - 1; level >= 0; level--) {
+                    if (matrix[level][curr].pred == path.get(0)) {
+                        break;
+                    }
+                    path.add(0, matrix[level][curr].pred);
+                    curr = path.get(0);
+                }
+
+                if (pathDistance < shortestDistance) {
+                    bestPath = path;
+                    shortestDistance = pathDistance;
                 }
             }
-
-            currList = nextList;
-            nextList = new ArrayList<>();
         }
 
-        // Assemble the path from the start to destination nodes
-        ArrayList<Integer> path = new ArrayList<>();
+        System.out.println("Done.");
 
-        int curr = destination;
-        path.add(destination);
-        for (int level=matrix.length-1; level>=0; level--) {
-            if (matrix[level][curr].pred == path.get(0)) {break;}
-            path.add(0, matrix[level][curr].pred);
-            curr = path.get(0);
-        }
-
-        Integer[] arr = new Integer[path.size()];
-        arr = path.toArray(arr);
+        Integer[] arr = new Integer[bestPath.size()];
+        arr = bestPath.toArray(arr);
         return arr;
     }
 
