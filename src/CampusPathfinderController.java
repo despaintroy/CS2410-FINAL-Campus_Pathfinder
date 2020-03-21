@@ -13,33 +13,31 @@ import javafx.scene.text.Text;
 
 public class CampusPathfinderController {
 
-    private UserMapView map;
     static final int TOP_HEIGHT        = 35;
     static final int LEFT_WIDTH        = 180;
     static final int VIEWPORT_WIDTH    = 967;
     static final int VIEWPORT_HEIGHT   = 683;
+    private UserMapView map;
 
     @FXML
-    public Pane centerPane;
     public HBox topBar;
-    public VBox leftBar;
-    public Button findPathSubmit;
     public Text tempReadout;
+    public VBox leftBar;
     public ComboBox<String> buildingFrom;
     public ComboBox<String> buildingTo;
+    public Button findPathSubmit;
+    public Pane centerPane;
 
-    @FXML
-    public void findPathClicked() {
-        map.drawShortestPath(buildingFrom.getValue(), buildingTo.getValue());
-        centerPane = map.getMasterPane();
-    }
 
+    /**
+     * This code automatically runs when the FXML is rendered
+     */
     @FXML
     public void initialize() {
 
         new Buildings();
 
-        // Set the dimensions of the viewport
+        // Set the dimensions of the UI
         topBar.setPrefHeight(TOP_HEIGHT);
         leftBar.setPrefWidth(LEFT_WIDTH);
 
@@ -48,6 +46,7 @@ public class CampusPathfinderController {
             tempReadout.setText("Temperature is " + Math.round(Weather.getTempF()) + " ºF");
         } catch (Weather.CannotGetTempException e) {
             tempReadout.setText("Temperature is -- ºF");
+            System.out.println("Not able to read temperature");
             e.printStackTrace();
         }
 
@@ -66,12 +65,26 @@ public class CampusPathfinderController {
     }
 
 
+    /**
+     * Handles the 'Find Path' button being clicked
+     */
+    @FXML
+    public void findPathClicked() {
+        map.drawShortestPath(buildingFrom.getValue(), buildingTo.getValue());
+        centerPane = map.getMasterPane();
+    }
+
+
+    /**
+     * This class extends MapView to implement functionality specific to the Admin window
+     */
     static class UserMapView extends MapView {
 
         private double[] lastClick = {-1,-1};
 
+
         /**
-         * Initializes a MapView.MapView with just an image to display for the background.
+         * Calls super to initialize MapView
          *
          * @param viewport_width  width of pane to create
          * @param viewport_height height of pane to create
@@ -80,7 +93,13 @@ public class CampusPathfinderController {
             super(viewport_width, viewport_height);
         }
 
-        // TODO: This class handles clicks on the map.
+
+        /**
+         * Processes clicks on the graph
+         *
+         * @param x the x coordinate the mouse was clicked at
+         * @param y the y coordinate the mouse was clicked at
+         */
         public void click(double x, double y) {
 
             // First Click

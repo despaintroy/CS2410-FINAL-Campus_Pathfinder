@@ -118,7 +118,7 @@ class Dijkstra {
             }
         }
 
-        System.out.println("Done.");
+        System.out.println("Done. (" + (System.currentTimeMillis()-startTime)/1000.0 +")");
 
         Integer[] arr = new Integer[bestPath.size()];
         arr = bestPath.toArray(arr);

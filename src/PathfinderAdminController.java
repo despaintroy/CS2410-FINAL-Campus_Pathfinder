@@ -3,6 +3,7 @@ import CampusMapView.Graph.Graph;
 import CampusMapView.Graph.Node;
 import CampusMapView.Graph.Edge;
 import CampusMapView.MapView;
+import Utilities.Settings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -14,34 +15,36 @@ import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class PathfinderAdminController {
 
-    private AdminMapView map;
     static final int TOP_HEIGHT        = 35;
     static final int BOTTOM_HEIGHT     = 35;
     static final int VIEWPORT_WIDTH    = 967;
     static final int VIEWPORT_HEIGHT   = 683;
+    private AdminMapView map;
 
     @FXML
-    public Button saveButton;
-    public Pane centerPane;
     public HBox topBar;
-    public HBox bottomBar;
     public Text tempReadout;
+    public HBox bottomBar;
     public ComboBox<String> actionChooser;
     public ComboBox<String> buildingActionChooser;
+    public Button saveButton;
+    public Pane centerPane;
 
 
+    /**
+     * This code automatically runs when the FXML is rendered
+     */
     @FXML
     public void initialize() {
 
         new Buildings();
 
-        // Set the dimensions of the viewport
+        // Set the dimensions of the UI
         topBar.setPrefHeight(TOP_HEIGHT);
         bottomBar.setPrefHeight(BOTTOM_HEIGHT);
 
@@ -69,12 +72,18 @@ public class PathfinderAdminController {
     }
 
 
+    /**
+     * This class extends MapView to implement functionality specific to the Admin window
+     */
     class AdminMapView extends MapView {
 
-        protected final Color BUILDING_COLOR = Color.RED;
+        // Colors used to draw paths
+        private final Color PATH_COLOR        = Color.NAVY;
+        private final Color BUILDING_COLOR    = Color.RED;
+
 
         /**
-         * Initializes a MapView.MapView with just an image to display for the background.
+         * Calls super to initialize MapView
          *
          * @param viewport_width  width of pane to create
          * @param viewport_height height of pane to create
@@ -83,6 +92,13 @@ public class PathfinderAdminController {
             super(viewport_width, viewport_height);
         }
 
+
+        /**
+         * Processes clicks on the graph
+         *
+         * @param x the x coordinate the mouse was clicked at
+         * @param y the y coordinate the mouse was clicked at
+         */
         void click(double x, double y) {
 
             x *= SCALE;
@@ -91,6 +107,7 @@ public class PathfinderAdminController {
             try {
                 Node closest = graph.getClosestNode(x, y);
 
+                // Find the closest node, and toggle it's indoors property
                 // TODO: Need a way to highlight all building nodes, and just the nodes of a specific building
                 if (closest.isIndoors()) {
                     closest.setIndoors(false);
@@ -103,14 +120,16 @@ public class PathfinderAdminController {
                 }
             } catch (Graph.EmptyGraphException e) {
                 System.out.println("Empty graph");
+                e.printStackTrace();
             }
 
+            // Redraw
             showAllPaths();
         }
 
 
         /**
-         * Draw all paths and nodes from the graph
+         * Draw all paths and nodes from the graph with proper colors
          */
         public void showAllPaths() {
 
@@ -141,9 +160,14 @@ public class PathfinderAdminController {
             }
         }
 
+
+        /**
+         * Save the edges and nodes to file
+         */
         public void save() {
 
-            System.out.println("Map will be saved to file.");
+//            final String NODES_FILE = "data/nodes.json";
+//            final String EDGES_FILE = "data/edges.json";
 
             Node [] nodes = graph.getAllNodes();
             Edge [] edges = graph.getAllEdges();
@@ -158,13 +182,12 @@ public class PathfinderAdminController {
                 nodeJSON.put("build",n.getBuildingCode());
                 nodeListJSON.add(nodeJSON);
             }
-            try (FileWriter file = new FileWriter("data/nodes.json")) {
+            try (FileWriter file = new FileWriter(NODES_FILEPATH)) {
                 file.write(nodeListJSON.toJSONString());
                 file.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.out.println("Nodes have been saved to JSON");
 
             // Write edges to file
             JSONArray edgeListJSON = new JSONArray();
@@ -176,13 +199,14 @@ public class PathfinderAdminController {
                     edgeListJSON.add(edgeJSON);
                 }
             }
-            try (FileWriter file = new FileWriter("data/edges.json")) {
+            try (FileWriter file = new FileWriter(EDGES_FILEPATH)) {
                 file.write(edgeListJSON.toJSONString());
                 file.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.out.println("Edges have been saved to JSON");
+
+            System.out.println("\nSave complete.");
         }
     }
 }

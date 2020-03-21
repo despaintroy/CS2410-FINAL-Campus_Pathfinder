@@ -2,22 +2,32 @@ package CampusMapView;
 
 import CampusMapView.Graph.Node;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Scanner;
 
 public class Buildings {
+
+    final String BUILDINGS_FILENAME = "data/buildingList.csv";
 
     private static Map<String, String> buildings = new Hashtable<>();
     private static Map<String, ArrayList<Integer>> buildingNodes = new Hashtable<>();
 
     public Buildings() {
-        // TODO: Get rid of these and have them read in from file instead
-        buildingNodes.put("LSB", new ArrayList<Integer>());
-        buildingNodes.put("MAIN", new ArrayList<Integer>());
-        buildingNodes.put("ENGR", new ArrayList<Integer>());
-        buildingNodes.put("FL", new ArrayList<Integer>());
-        buildingNodes.put("LDSI", new ArrayList<Integer>());
+
+        try {
+            File buildingFile = new File(BUILDINGS_FILENAME);
+            Scanner sc = new Scanner(buildingFile);
+            while (sc.hasNextLine()) {
+                buildingNodes.put(sc.next(), new ArrayList<>());
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Building file not found");
+            e.printStackTrace();
+        }
     }
 
     public static String[] getCodes() {

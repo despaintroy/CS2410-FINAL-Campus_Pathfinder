@@ -9,18 +9,18 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class MapView {
 
-    private final String EDGES_FILEPATH = "data/edges.json";
-    private final String NODES_FILEPATH = "data/nodes.json";
-    private final String MAP_FILEPATH = "data/campus_map.png";
-    protected final Color PATH_COLOR = Color.NAVY;
+    protected final String EDGES_FILEPATH   = "data/edges.json";
+    protected final String NODES_FILEPATH   = "data/nodes.json";
+    private final String MAP_FILEPATH       = "data/campus_map.png";
+    protected final Color PATH_COLOR        = Color.NAVY;
 
+    // TODO: dynamically calculate the scale
     protected final double SCALE = 1.448;
 
     private Pane masterPane;
@@ -29,7 +29,7 @@ public class MapView {
 
 
     /**
-     * Initializes a MapView.MapView with just an image to display for  tbe background.
+     * Initializes a MapView with just an image to display for  tbe background.
      *
      * @param viewport_width width of pane to create
      * @param viewport_height height of pane to create
@@ -60,31 +60,33 @@ public class MapView {
     /**
      * Draw the shortest path between two nodes
      *
-     * @param from the name of the building to start at
-     * @param to the name of the building to end at
+     * @param startCode the building code to start at
+     * @param endCode the building code to end at
      */
-    public void drawShortestPath(String from, String to) {
+    public void drawShortestPath(String startCode, String endCode) {
 
-        System.out.println("From (" + from + ") to (" + to + ")");
+        System.out.println("\nFrom " + startCode + " to " + endCode + ":");
 
-        // Find the node of the building, then call the other drawShortestPath function
-        ArrayList<Integer> start = Buildings.getNodes(from);
-        ArrayList<Integer> end = Buildings.getNodes(to);
+        // Find the nodes of the building, then call the other drawShortestPath function
+        ArrayList<Integer> startIDs = Buildings.getNodes(startCode);
+        ArrayList<Integer> endIDs = Buildings.getNodes(endCode);
 
-        drawShortestPath(start, end);
+        drawShortestPath(startIDs, endIDs);
     }
 
 
     /**
      * Draw the shortest path between two nodes
      *
-     * @param from the name of the building to start at
-     * @param to the name of the building to end at
+     * @param startID the node id to start at
+     * @param endID the node id to end at
      */
-    public void drawShortestPath(int from, int to) {
+    public void drawShortestPath(int startID, int endID) {
 
-        ArrayList<Integer> startList = new ArrayList<Integer>(){{add(from);}};
-        ArrayList<Integer> endList = new ArrayList<Integer>(){{add(to);}};
+        System.out.println("\nFrom " + startID + " to " + endID + ":");
+
+        ArrayList<Integer> startList = new ArrayList<Integer>(){{add(startID);}};
+        ArrayList<Integer> endList = new ArrayList<Integer>(){{add(endID);}};
         drawShortestPath(startList, endList);
     }
 
@@ -95,6 +97,7 @@ public class MapView {
      * @param start building name to start from
      * @param end building name to end at
      */
+    // TODO: Change this to use sets instead of array lists
     public void drawShortestPath(ArrayList<Integer> start, ArrayList<Integer> end) {
 
         Integer[] bestPath = graph.findPath(start, end);
@@ -102,13 +105,6 @@ public class MapView {
 
         // Clear any existing graph from off the pane
         clearPaths();
-
-        // Mark with circles the endpoints
-        int startNode = bestPath[0];
-        int endNode = bestPath[bestPath.length-1];
-        Circle startCircle = new Circle(nodes[startNode].getX()/SCALE, nodes[startNode].getY()/SCALE, 5 , PATH_COLOR);
-        Circle endCircle = new Circle(nodes[endNode].getX()/SCALE, nodes[endNode].getY()/SCALE, 5 , PATH_COLOR);
-        pathsPane.getChildren().addAll(startCircle, endCircle);
 
         // Draw the path onto the pane
         for (int i=0; i<bestPath.length-1; i++) {
@@ -124,6 +120,13 @@ public class MapView {
             temp.setStrokeWidth(2);
             pathsPane.getChildren().add(temp);
         }
+
+        // Mark the endpoints with circles
+        int startNode = bestPath[0];
+        int endNode = bestPath[bestPath.length-1];
+        Circle startCircle = new Circle(nodes[startNode].getX()/SCALE, nodes[startNode].getY()/SCALE, 5 , PATH_COLOR);
+        Circle endCircle = new Circle(nodes[endNode].getX()/SCALE, nodes[endNode].getY()/SCALE, 5 , PATH_COLOR);
+        pathsPane.getChildren().addAll(startCircle, endCircle);
     }
 
 
@@ -139,6 +142,9 @@ public class MapView {
     }
 
 
+    /**
+     * Clears everything that was drawn onto the paths pane
+     */
     public void clearPaths() {
         pathsPane.getChildren().clear();
     }

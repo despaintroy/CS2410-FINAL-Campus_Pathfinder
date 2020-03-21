@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.Reader;
 
 
-class Settings {
+public class Settings {
 
     private final static String SETTINGS_JSON = "data/settings.json";
 
@@ -20,7 +20,7 @@ class Settings {
      * @param key the key used to reference the value
      * @param value the value to store
      */
-    static void set(String key, String value) {
+    public static void set(String key, String value) {
 
         JSONParser parser = new JSONParser();
         JSONObject obj;
@@ -51,7 +51,7 @@ class Settings {
      * @return the value stored at that key
      * @throws CannotGetValueException
      */
-    static String get(String key) throws CannotGetValueException {
+    public static String get(String key) throws CannotGetValueException {
 
         JSONParser parser = new JSONParser();
         JSONObject obj;
@@ -76,7 +76,7 @@ class Settings {
         return toReturn;
     }
 
-    static class CannotGetValueException extends Exception {
+    public static class CannotGetValueException extends Exception {
         public CannotGetValueException(String message) {
             super(message);
         }

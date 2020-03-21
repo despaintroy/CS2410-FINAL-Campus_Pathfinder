@@ -38,7 +38,7 @@
     </center>
 
     <stylesheets>
-        <URL value="@CampusPathfinder.css" />
+        <URL value="@pathfinder.css" />
     </stylesheets>
 
 </BorderPane>
