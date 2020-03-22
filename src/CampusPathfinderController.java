@@ -11,6 +11,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class CampusPathfinderController {
 
     static final int TOP_HEIGHT        = 35;
@@ -23,8 +26,8 @@ public class CampusPathfinderController {
     public HBox topBar;
     public Text tempReadout;
     public VBox leftBar;
-    public ComboBox<String> buildingFrom;
-    public ComboBox<String> buildingTo;
+    public ComboBox buildingFrom;
+    public ComboBox buildingTo;
     public Button findPathSubmit;
     public Pane centerPane;
 
@@ -55,13 +58,22 @@ public class CampusPathfinderController {
         centerPane.getChildren().setAll(map.getMasterPane());
 
         // Handle clicks on the graph
-        centerPane.setOnMouseClicked(e -> {
-            map.click(e.getX(), e.getY());
-        });
+        centerPane.setOnMouseClicked(e -> {map.click(e.getX(), e.getY());});
 
         // Populate the Combo Boxes
-        buildingFrom.getItems().addAll(Buildings.getCodes());
-        buildingTo.getItems().addAll(Buildings.getCodes());
+        ArrayList<String> buildingCodes = getFilteredBuildings("");
+        buildingFrom.getItems().addAll(buildingCodes);
+        buildingTo.getItems().addAll(buildingCodes);
+
+        new AutoCompleteComboBoxListener<>(buildingFrom);
+        new AutoCompleteComboBoxListener<>(buildingTo);
+    }
+
+
+    static ArrayList<String> getFilteredBuildings(String searchTerm) {
+        ArrayList<String> filtered = Buildings.getCodesWithNodes();
+        Collections.sort(filtered);
+        return filtered;
     }
 
 
@@ -70,7 +82,7 @@ public class CampusPathfinderController {
      */
     @FXML
     public void findPathClicked() {
-        map.drawShortestPath(buildingFrom.getValue(), buildingTo.getValue());
+        map.drawShortestPath((String)buildingFrom.getValue(), (String)buildingTo.getValue());
         centerPane = map.getMasterPane();
     }
 

@@ -3,7 +3,6 @@ import CampusMapView.Graph.Graph;
 import CampusMapView.Graph.Node;
 import CampusMapView.Graph.Edge;
 import CampusMapView.MapView;
-import Utilities.Settings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -54,6 +53,7 @@ public class PathfinderAdminController {
 
         // Populate the Combo Boxes
         buildingActionChooser.getItems().addAll(Buildings.getCodes());
+        new AutoCompleteComboBoxListener<>(buildingActionChooser);
 
         // Handle changes to the action combo box
         actionChooser.setOnAction(event -> {
@@ -69,6 +69,11 @@ public class PathfinderAdminController {
 
         // Handle button clicks
         saveButton.setOnAction(event -> map.save());
+
+        // Handle changes to the building action chooser
+        buildingActionChooser.setOnAction(event -> {
+            map.showAllPaths();
+        });
     }
 
 
@@ -108,7 +113,6 @@ public class PathfinderAdminController {
                 Node closest = graph.getClosestNode(x, y);
 
                 // Find the closest node, and toggle it's indoors property
-                // TODO: Need a way to highlight all building nodes, and just the nodes of a specific building
                 if (closest.isIndoors()) {
                     closest.setIndoors(false);
                     closest.setBuildingCode("");
@@ -135,6 +139,8 @@ public class PathfinderAdminController {
 
             clearPaths();
 
+            String selectedBuilding = buildingActionChooser.getValue();
+
             Node[] nodes = graph.getAllNodes();
             Edge[] edgeCoords = graph.getAllEdges();
 
@@ -146,16 +152,23 @@ public class PathfinderAdminController {
                     double x2 = e.getN2().getX();
                     double y2 = e.getN2().getY();
 
+                    boolean showIndoors = e.isIndoors() &&
+                            selectedBuilding.equals(e.getN1().getBuildingCode()) &&
+                            selectedBuilding.equals(e.getN2().getBuildingCode());
+
                     Line temp = new Line(x1/SCALE, y1/SCALE, x2/SCALE, y2/SCALE);
-                    temp.setStroke(e.isIndoors() ? BUILDING_COLOR : PATH_COLOR);
+                    temp.setStroke(showIndoors ? BUILDING_COLOR : PATH_COLOR);
                     pathsPane.getChildren().add(temp);
                 }
             }
 
             // Draw each node
             for (Node n : nodes) {
+
+                boolean showIndoors = n.isIndoors() && selectedBuilding.equals(n.getBuildingCode());
+
                 Circle temp = new Circle(n.getX()/SCALE, n.getY()/SCALE,2);
-                temp.setFill(n.isIndoors() ? BUILDING_COLOR : PATH_COLOR);
+                temp.setFill(showIndoors ? BUILDING_COLOR : PATH_COLOR);
                 pathsPane.getChildren().add(temp);
             }
         }

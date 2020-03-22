@@ -42,8 +42,21 @@ public class Buildings {
         return buildList;
     }
 
-    // TODO: Make this return the whole list as an array
+    public static ArrayList<String> getCodesWithNodes(){
+        ArrayList<String> buildList = new ArrayList<>();
+        for (String building : buildingNodes.keySet()) {
+            if (buildingNodes.get(building).size()>0) {
+                buildList.add(building);
+            }
+        }
+        return buildList;
+    }
+
+        // TODO: Make this return the whole list as an array
     public static ArrayList<Integer> getNodes(String buildingCode) {
+        if (buildingCode==null || buildingCode.equals("")) {
+            return new ArrayList<Integer>();
+        }
         return buildingNodes.get(buildingCode);
     }
 

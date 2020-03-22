@@ -4,8 +4,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
 
 <BorderPane fx:controller="CampusPathfinderController"
             xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2"

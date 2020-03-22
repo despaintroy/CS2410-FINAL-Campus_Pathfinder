@@ -71,6 +71,11 @@ public class MapView {
         ArrayList<Integer> startIDs = Buildings.getNodes(startCode);
         ArrayList<Integer> endIDs = Buildings.getNodes(endCode);
 
+        if (startIDs.size()==0 || endIDs.size()==0) {
+            System.out.println("No nodes assigned to building");
+            return;
+        }
+
         drawShortestPath(startIDs, endIDs);
     }
 
