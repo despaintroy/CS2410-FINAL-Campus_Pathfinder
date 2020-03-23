@@ -3,8 +3,8 @@ import CampusMapView.MapView;
 import CampusMapView.Buildings;
 import Utilities.Weather;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -26,9 +26,10 @@ public class CampusPathfinderController {
     public HBox topBar;
     public Text tempReadout;
     public VBox leftBar;
-    public ComboBox buildingFrom;
-    public ComboBox buildingTo;
-    public Button findPathSubmit;
+    public ComboBox<String> buildingFrom;
+    public ComboBox<String> buildingTo;
+    public Slider indoorSlider;
+//    public Button findPathSubmit;
     public Pane centerPane;
 
 
@@ -58,19 +59,32 @@ public class CampusPathfinderController {
         centerPane.getChildren().setAll(map.getMasterPane());
 
         // Handle clicks on the graph
-        centerPane.setOnMouseClicked(e -> {map.click(e.getX(), e.getY());});
+        centerPane.setOnMouseClicked(e -> {
+            buildingFrom.setValue("");
+            buildingTo.setValue("");
+            map.click(e.getX(), e.getY());
+        });
 
         // Populate the Combo Boxes
-        ArrayList<String> buildingCodes = getFilteredBuildings("");
+        ArrayList<String> buildingCodes = getFilteredBuildings();
         buildingFrom.getItems().addAll(buildingCodes);
         buildingTo.getItems().addAll(buildingCodes);
+        buildingFrom.setOnAction(event -> findPathClicked());
+        buildingTo.setOnAction(event -> findPathClicked());
 
         new AutoCompleteComboBoxListener<>(buildingFrom);
         new AutoCompleteComboBoxListener<>(buildingTo);
+
+        // Changes to the indoor weight slider
+        indoorSlider.setValue(1);
+        indoorSlider.setOnMouseReleased(event -> {
+            map.setIndoorWeight(indoorSlider.getValue());
+            map.redraw();
+        });
     }
 
 
-    static ArrayList<String> getFilteredBuildings(String searchTerm) {
+    static ArrayList<String> getFilteredBuildings() {
         ArrayList<String> filtered = Buildings.getCodesWithNodes();
         Collections.sort(filtered);
         return filtered;
@@ -82,7 +96,7 @@ public class CampusPathfinderController {
      */
     @FXML
     public void findPathClicked() {
-        map.drawShortestPath((String)buildingFrom.getValue(), (String)buildingTo.getValue());
+        map.drawShortestPath(buildingFrom.getValue(), buildingTo.getValue());
         centerPane = map.getMasterPane();
     }
 

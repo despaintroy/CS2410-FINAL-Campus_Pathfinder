@@ -24,6 +24,9 @@ public class MapView {
     protected final double SCALE = 1.448;
     private double indoorWeight;
 
+    private ArrayList<Integer> startPersist;
+    private ArrayList<Integer> endPersist;
+
     private Pane masterPane;
     protected Pane pathsPane;
     protected Graph graph;
@@ -78,7 +81,9 @@ public class MapView {
             return;
         }
 
-        drawShortestPath(startIDs, endIDs);
+        startPersist = startIDs;
+        endPersist = endIDs;
+        drawShortestPath();
     }
 
 
@@ -94,20 +99,30 @@ public class MapView {
 
         ArrayList<Integer> startList = new ArrayList<Integer>(){{add(startID);}};
         ArrayList<Integer> endList = new ArrayList<Integer>(){{add(endID);}};
-        drawShortestPath(startList, endList);
+        startPersist = startList;
+        endPersist = endList;
+        drawShortestPath();
     }
 
 
     /**
      * Draw the shortest path between two nodes
-     *
-     * @param start building name to start from
-     * @param end building name to end at
      */
     // TODO: Change this to use sets instead of array lists
-    public void drawShortestPath(ArrayList<Integer> start, ArrayList<Integer> end) {
+    public void drawShortestPath() {
+        Integer[] bestPath = graph.findPath(startPersist, endPersist, indoorWeight);
+        drawPath(bestPath);
+    }
 
-        Integer[] bestPath = graph.findPath(start, end, indoorWeight);
+    // TODO: Get rid of this funciton. Have the map store the start and end points.
+    public void redraw() {
+        if (startPersist != null && endPersist != null) {
+            drawShortestPath();
+        }
+    }
+
+    void drawPath(Integer[] bestPath) {
+
         Node[] nodes = graph.getAllNodes();
 
         // Clear any existing graph from off the pane
@@ -136,7 +151,6 @@ public class MapView {
         pathsPane.getChildren().addAll(startCircle, endCircle);
     }
 
-
     /**
      * Finds the closest node to the given coordinate
      *
@@ -156,6 +170,10 @@ public class MapView {
         pathsPane.getChildren().clear();
     }
 
+
+    public void setIndoorWeight(double indoorWeight) {
+        this.indoorWeight = indoorWeight;
+    }
 
     /**
      * Gets the pane with the map drawn on it

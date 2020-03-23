@@ -24,11 +24,9 @@
             <Label styleClass="vform-label">To:</Label>
             <ComboBox styleClass="vform-combo" fx:id="buildingTo" id="building-to" promptText="Choose building" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
 
-            <Label styleClass="vform-spacer"/>
-
-            <Button styleClass="vform-submit" fx:id="findPathSubmit" onAction="#findPathClicked" HBox.hgrow="ALWAYS" maxWidth="Infinity">
-                Find Path
-            </Button>
+            <Label styleClass="vform-spacer-medium"/>
+            <Label styleClass="vform-label">Indoor Weight:</Label>
+            <Slider fx:id="indoorSlider" min="0.01" max="1" />
 
         </VBox>
     </left>

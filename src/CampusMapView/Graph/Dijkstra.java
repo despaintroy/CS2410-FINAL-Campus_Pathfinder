@@ -57,9 +57,6 @@ class Dijkstra {
         ArrayList<Integer> currList = new ArrayList<>();    // List of all nodes working on in the current level
         ArrayList<Integer> nextList = new ArrayList<>();    // List of adjacent nodes that need to be checked next
 
-//        int begin = start.get(0);
-//        int end = destination.get(0);
-
         ArrayList<Integer> bestPath = new ArrayList<>();
         double shortestDistance = Double.MAX_VALUE;
 
@@ -176,20 +173,6 @@ class Dijkstra {
         double weight = edge.getLength();
         if (edge.isActive() && edge.isIndoors()) {weight *= indoorWeight;}
         return weight;
-    }
-
-
-//    TODO: Delete this, for debugging only
-    private void printMatrix() {
-
-        System.out.println("MATRIX:");
-        for (Info[] row : dMatrix) {
-            for (Info d : row) {
-                System.out.print("(" + (d.pred == -1 ? "_" : d.pred) + ", " + (d.totalWeight == Double.MAX_VALUE ? "___" : Math.round(d.totalWeight)) + ")" + "\t");
-            }
-            System.out.print("\n");
-        }
-        System.out.print("\n");
     }
 
 

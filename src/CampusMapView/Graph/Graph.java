@@ -16,6 +16,7 @@ public class Graph {
 
     private Edge [][] adjacency;     // Edges
     private ArrayList<Node> nodes;   // List of nodes
+    Dijkstra dijkstra;
 
 
     /**
@@ -101,8 +102,8 @@ public class Graph {
      * @return list of node id's that make up the path
      */
     public Integer [] findPath(ArrayList<Integer> start, ArrayList<Integer> end, double indoorWeight) {
-        Dijkstra pathFinder = new Dijkstra(adjacency, start, end, indoorWeight);
-        return pathFinder.findPath();
+        dijkstra = new Dijkstra(adjacency, start, end, indoorWeight);
+        return dijkstra.findPath();
     }
 
 
@@ -174,6 +175,11 @@ public class Graph {
      */
     private double dist(double[] p1, double[] p2) {
         return Math.sqrt(Math.pow(p1[0]-p2[0], 2) + Math.pow(p1[1]-p2[1], 2));
+    }
+
+
+    public boolean hasDijkstra() {
+        return dijkstra != null;
     }
 
 

@@ -23,8 +23,12 @@
     -fx-padding: 5 0 5 0;
 }
 
-.vform-spacer {
+.vform-spacer-large {
     -fx-padding: 15 0 0 0
+}
+
+.vform-spacer-medium {
+    -fx-padding: 5 0 0 0
 }
 
 .vform-submit {
