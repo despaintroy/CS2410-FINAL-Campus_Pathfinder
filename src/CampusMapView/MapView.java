@@ -22,6 +22,7 @@ public class MapView {
 
     // TODO: dynamically calculate the scale
     protected final double SCALE = 1.448;
+    private double indoorWeight;
 
     private Pane masterPane;
     protected Pane pathsPane;
@@ -37,6 +38,7 @@ public class MapView {
     public MapView(int viewport_width, int viewport_height) {
 
         graph = new Graph(NODES_FILEPATH, EDGES_FILEPATH);
+        indoorWeight = 1;
 
         masterPane = new StackPane();
         pathsPane = new Pane();
@@ -105,7 +107,7 @@ public class MapView {
     // TODO: Change this to use sets instead of array lists
     public void drawShortestPath(ArrayList<Integer> start, ArrayList<Integer> end) {
 
-        Integer[] bestPath = graph.findPath(start, end);
+        Integer[] bestPath = graph.findPath(start, end, indoorWeight);
         Node[] nodes = graph.getAllNodes();
 
         // Clear any existing graph from off the pane

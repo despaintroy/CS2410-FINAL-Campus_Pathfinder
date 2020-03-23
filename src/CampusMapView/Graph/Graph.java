@@ -14,7 +14,7 @@ import org.json.simple.parser.ParseException;
 
 public class Graph {
 
-    private Edge [][] adjacency;     // Lengths of edges
+    private Edge [][] adjacency;     // Edges
     private ArrayList<Node> nodes;   // List of nodes
 
 
@@ -86,10 +86,10 @@ public class Graph {
      * @param end id of end node
      * @return list of node id's that make up the path
      */
-    public Integer [] findPath(int start, int end) {
+    public Integer [] findPath(int start, int end, double indoorWeight) {
         ArrayList<Integer> startList = new ArrayList<Integer>(){{add(start);}};
         ArrayList<Integer> endList = new ArrayList<Integer>(){{add(end);}};
-        return findPath(startList, endList);
+        return findPath(startList, endList, indoorWeight);
     }
 
 
@@ -100,8 +100,8 @@ public class Graph {
      * @param end id of end node
      * @return list of node id's that make up the path
      */
-    public Integer [] findPath(ArrayList<Integer> start, ArrayList<Integer> end) {
-        Dijkstra pathFinder = new Dijkstra(adjacency, start, end);
+    public Integer [] findPath(ArrayList<Integer> start, ArrayList<Integer> end, double indoorWeight) {
+        Dijkstra pathFinder = new Dijkstra(adjacency, start, end, indoorWeight);
         return pathFinder.findPath();
     }
 
@@ -155,10 +155,8 @@ public class Graph {
 
         ArrayList<Edge> tempEdges = new ArrayList<>();
 
-        for (int i=0; i<adjacency.length; i++) {
-            for (int j=0; j<adjacency[i].length; j++) {
-                tempEdges.add(adjacency[i][j]);
-            }
+        for (Edge[] edges : adjacency) {
+            tempEdges.addAll(Arrays.asList(edges));
         }
 
         Edge[] arr = new Edge[tempEdges.size()];

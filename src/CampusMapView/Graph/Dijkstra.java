@@ -4,10 +4,11 @@ import java.util.ArrayList;
 
 class Dijkstra {
 
-    private Edge [][] adjacency;    // Adjacency matrix that holds distances between nodes
-    private Info [][] matrix;       // 2D Array of Info objects for running Dijkstra's algorithm
+    private double [][] adjacency;  // Adjacency matrix that holds edge weights
+    private Info [][] dMatrix;       // 2D Array of Info objects for running Dijkstra's algorithm
     private ArrayList<Integer> start;              // ID of the starting node
     private ArrayList<Integer> destination;        // ID of the destination node
+    private double indoorWeight;
 
 
     /**
@@ -16,27 +17,34 @@ class Dijkstra {
      * @param graph Adjacency matrix to use
      * @param start Index of the start node
      * @param destination Index of the end node
-     *                    .
      */
     // TODO: Make this using arrays instead
-    Dijkstra(Edge[][] graph, ArrayList<Integer> start, ArrayList<Integer> destination) {
+    Dijkstra(Edge[][] graph, ArrayList<Integer> start, ArrayList<Integer> destination, double indoorWeight) {
 
-        this.adjacency = graph;
+        this.adjacency = new double[graph.length][graph.length];
         this.start = start;
         this.destination = destination;
+        this.indoorWeight = indoorWeight;
 
-        // Initialize the adjacency matrix
-        matrix = new Info[graph.length][graph.length];
+        // Populate the adjacency matrix with weighted edges
+        for (int i=0; i<adjacency.length; i++) {
+            for (int j=0; j<adjacency[0].length; j++) {
+                Edge edge = graph[i][j];
+                adjacency[i][j] = getWeight(edge);
+            }
+        }
 
-        for (int i=0; i<matrix.length; i++) {
-            for (int j=0; j<matrix.length; j++) {
-                matrix[i][j] = new Info(-1, Double.MAX_VALUE);
+        // Initialize the Dijkstra matrix
+        dMatrix = new Info[graph.length][graph.length];
+
+        for (int i = 0; i< dMatrix.length; i++) {
+            for (int j = 0; j< dMatrix.length; j++) {
+                dMatrix[i][j] = new Info(-1, Double.MAX_VALUE);
             }
         }
     }
 
     // TODO: I think we can do this using only one level...lets try that. We just need to quit when nextList is empty
-
     /**
      * Finds the shortest path between two nodes
      *
@@ -65,12 +73,12 @@ class Dijkstra {
 
                 // Beginning at the start node
                 currList.add(begin);
-                matrix[0][begin] = new Info(begin, 0);
+                dMatrix[0][begin] = new Info(begin, 0);
 
-                for (int level = 1; level < matrix.length; level++) {
+                for (int level = 1; level < dMatrix.length; level++) {
 
                     // Copy the Info objects down from the previous level
-                    matrix[level] = matrix[level - 1].clone();
+                    dMatrix[level] = dMatrix[level - 1].clone();
 
                     // For each current node, get adjacent nodes, then update their info if we've found a shorter distance
                     for (int curr : currList) {
@@ -78,8 +86,8 @@ class Dijkstra {
                         ArrayList<Integer> conns = getAdjacentNodes(curr);
 
                         for (int c : conns) {
-                            if (matrix[level][c].distance > matrix[level - 1][curr].distance + getAdjacency(curr, c).getLength()) {
-                                matrix[level][c] = new Info(curr, matrix[level - 1][curr].distance + getAdjacency(curr, c).getLength());
+                            if (dMatrix[level][c].totalWeight > dMatrix[level - 1][curr].totalWeight + getWeight(curr, c)) {
+                                dMatrix[level][c] = new Info(curr, dMatrix[level - 1][curr].totalWeight + getWeight(curr, c));
                                 nextList.add(c);
                             }
                         }
@@ -90,7 +98,7 @@ class Dijkstra {
                 }
 
                 // Store the distance
-                double pathDistance = matrix[matrix.length - 1][end].distance;
+                double pathDistance = dMatrix[dMatrix.length - 1][end].totalWeight;
 
                 // Assemble the path from the start to destination nodes
                 ArrayList<Integer> path = new ArrayList<>();
@@ -98,16 +106,16 @@ class Dijkstra {
                 int curr = end;
                 path.add(end);
 
-                for (int level = matrix.length - 1; level >= 0; level--) {
-//
-                    //TODO: Why would it be -1?
+                for (int level = dMatrix.length - 1; level >= 0; level--) {
+
+                    //TODO: Why would it ever be -1?
                     if (curr==-1) {
                         break;
                     }
-                    if (matrix[level][curr].pred == path.get(0)) {
+                    if (dMatrix[level][curr].pred == path.get(0)) {
                         break;
                     }
-                    path.add(0, matrix[level][curr].pred);
+                    path.add(0, dMatrix[level][curr].pred);
                     curr = path.get(0);
                 }
 
@@ -137,13 +145,13 @@ class Dijkstra {
         ArrayList<Integer> ints = new ArrayList<>();
 
         for (int i=id+1; i<adjacency.length; i++) {
-            if (adjacency[i][id].isActive()) {
+            if (adjacency[i][id] >= 0) {
                 ints.add(i);
             }
         }
 
         for (int i=0; i<id; i++) {
-            if (adjacency[id][i].isActive()) {
+            if (adjacency[id][i] >= 0) {
                 ints.add(i);
             }
         }
@@ -153,14 +161,21 @@ class Dijkstra {
 
 
     /**
-     * Gets a value from the adjacency matrix (distance between the given nodes)
+     * Gets a weight from the adjacency matrix (distance between the given nodes)
      * @param n1 the ID of the first node
      * @param n2 the ID of the second node
      *
      * @return the distance between the nodes form the adjacency matrix
      */
-    private Edge getAdjacency(int n1, int n2) {
+    private double getWeight(int n1, int n2) {
         return adjacency[Math.max(n1, n2)][Math.min(n1, n2)];
+    }
+
+
+    private double getWeight(Edge edge) {
+        double weight = edge.getLength();
+        if (edge.isActive() && edge.isIndoors()) {weight *= indoorWeight;}
+        return weight;
     }
 
 
@@ -168,9 +183,9 @@ class Dijkstra {
     private void printMatrix() {
 
         System.out.println("MATRIX:");
-        for (Info [] row : matrix) {
+        for (Info[] row : dMatrix) {
             for (Info d : row) {
-                System.out.print("("+(d.pred==-1?"_":d.pred)+", "+(d.distance==Double.MAX_VALUE ? "___" : Math.round(d.distance))+")" + "\t");
+                System.out.print("(" + (d.pred == -1 ? "_" : d.pred) + ", " + (d.totalWeight == Double.MAX_VALUE ? "___" : Math.round(d.totalWeight)) + ")" + "\t");
             }
             System.out.print("\n");
         }
@@ -183,11 +198,11 @@ class Dijkstra {
      */
     private class Info {
         int pred;
-        double distance;
+        double totalWeight;
 
         Info(int pred, double distance) {
             this.pred = pred;
-            this.distance = distance;
+            this.totalWeight = distance;
         }
     }
 }
