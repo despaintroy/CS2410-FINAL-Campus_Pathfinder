@@ -20,13 +20,12 @@ There are two methods that can be used to select starting and ending points for 
 
 I built this program following the Model-View-Controller design paradigm. The structure of my view is defined using FXML and styled using CSS. View controllers dynamically load images and other data into the view when the application loads. The graph data for all the possible paths on campus is stored externally in JSON files, then loaded into RAM on startup.
 
-Below is a UML Diagram of the structure of my Java classes:
+Below is a the start of my UML diagram outlining the relationship between classes
 
-![alt text](screenshot.png)
+![alt text](UML.png)
 
 
 ## Project Requirements
-
 
 ### JavaFX Panes (2)
 
@@ -67,38 +66,3 @@ There are no animations currently implemented, but maybe I'll have a box display
 ### Server-Client Connection
 
 Campus Pathfinder displays the current temperature on campus in order to help the user decide how much priority should be placed on walking indoors. I accomplished this by making an API call to ClimaCell. Since the free version of this API is limited to only 100 requests per day, the API call is only made at most once every 20 minutes. The time and result of the API call is stored in the file settings.json so it can remember the weather even if the application is restarted. 
-
-
-
-Create a Word Document, or PowerPoint, or another format which clearly displays the following information.  I am not so much worried about the format of this HW assignment, as much as seeing how your project is coming together.
-
-Include:
-
-Which Project you are working on (Chess/Sudoku/Web Browser/Other)
-
-Group Members
-
-A high-level explanation of what each group member will be doing.  It's OK if this changes later, but I want to see a plan.
-
-Design and/or layout of your JavaFX Application.  This can be done in Word, or Powerpoint, or even hand-drawn and turned in as an image.
-
-Brief explanation how each of the following requirements are being met:
-
- 
-
-Project Requirements
-
-At least 2 types JavaFX Panes organized well, to give your GUI a nice appearance and usability. (30 points)
-
-At least 6 types of JavaFX Nodes, i.e. Buttons, TextField, Labels, CheckBoxes, RadioButtons, ImageView, etc. (30 points)
-
-Animation i.e. Timeline or FadeTransition.  Or a video/audio component. (15 points)
-
-Events (20 points)
-
-Bindings (20 points)
-
-Listeners (20 points)
-
-Server-Client, or Client-Client connectivity (15 points)
-
