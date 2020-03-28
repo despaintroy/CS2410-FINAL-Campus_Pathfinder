@@ -18,6 +18,7 @@ public class Buildings {
 
     public Buildings() {
 
+        // Read in a list of all the building codes from file
         try {
             File buildingFile = new File(BUILDINGS_FILENAME);
             Scanner sc = new Scanner(buildingFile);
@@ -30,6 +31,11 @@ public class Buildings {
         }
     }
 
+    /**
+     * Gets all of the building codes
+     *
+     * @return array of all the building codes
+     */
     public static String[] getCodes() {
 
         String[] buildList = new String[buildingNodes.size()];
@@ -42,6 +48,12 @@ public class Buildings {
         return buildList;
     }
 
+
+    /**
+     * Returns all the building codes with non-empty ArrayLists of nodes
+     *
+     * @return array of all codes with nodes
+     */
     public static ArrayList<String> getCodesWithNodes(){
         ArrayList<String> buildList = new ArrayList<>();
         for (String building : buildingNodes.keySet()) {
@@ -52,7 +64,13 @@ public class Buildings {
         return buildList;
     }
 
-        // TODO: Make this return the whole list as an array
+
+    /**
+     * Returns the list of nodes from teh specified building code
+     *
+     * @param buildingCode the code for the specified building
+     * @return the list of nodes for that building
+     */
     public static ArrayList<Integer> getNodes(String buildingCode) {
         if (buildingCode==null || buildingCode.equals("")) {
             return new ArrayList<Integer>();

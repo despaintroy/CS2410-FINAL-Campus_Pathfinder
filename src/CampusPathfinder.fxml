@@ -25,8 +25,8 @@
             <ComboBox styleClass="vform-combo" fx:id="buildingTo" id="building-to" promptText="Choose building" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
 
             <Label styleClass="vform-spacer-medium"/>
-            <Label styleClass="vform-label">Indoor Weight:</Label>
-            <Slider fx:id="indoorSlider" min="0.01" max="1" />
+            <Label styleClass="vform-label">Prioritize Indoors:</Label>
+            <Slider fx:id="indoorSlider" min="0" max=".99" />
 
         </VBox>
     </left>

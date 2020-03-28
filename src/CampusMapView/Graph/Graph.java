@@ -178,11 +178,6 @@ public class Graph {
     }
 
 
-    public boolean hasDijkstra() {
-        return dijkstra != null;
-    }
-
-
     @Override
     public String toString() {
 

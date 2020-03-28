@@ -39,6 +39,9 @@ public class CampusPathfinderController {
     @FXML
     public void initialize() {
 
+        // TODO: Have it display the length of the path found
+        // TODO: Display the amount that is spent indoors
+
         new Buildings();
 
         // Set the dimensions of the UI
@@ -69,16 +72,16 @@ public class CampusPathfinderController {
         ArrayList<String> buildingCodes = getFilteredBuildings();
         buildingFrom.getItems().addAll(buildingCodes);
         buildingTo.getItems().addAll(buildingCodes);
-        buildingFrom.setOnAction(event -> findPathClicked());
-        buildingTo.setOnAction(event -> findPathClicked());
+        buildingFrom.setOnHiding(event -> findPathClicked());
+        buildingTo.setOnHiding(event -> findPathClicked());
 
         new AutoCompleteComboBoxListener<>(buildingFrom);
         new AutoCompleteComboBoxListener<>(buildingTo);
 
         // Changes to the indoor weight slider
-        indoorSlider.setValue(1);
+        indoorSlider.setValue(0);
         indoorSlider.setOnMouseReleased(event -> {
-            map.setIndoorWeight(indoorSlider.getValue());
+            map.setIndoorWeight(1-indoorSlider.getValue());
             map.redraw();
         });
     }

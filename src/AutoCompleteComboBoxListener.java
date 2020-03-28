@@ -50,6 +50,7 @@ public class AutoCompleteComboBoxListener<T> implements EventHandler<KeyEvent> {
         } else if(eventCode == KeyCode.BACK_SPACE) {
             moveCursorToPos = true;
             cursorPos = comboBox.getEditor().getCaretPosition();
+            comboBox.hide();
         } else if(eventCode == KeyCode.DELETE) {
             moveCursorToPos = true;
             cursorPos = comboBox.getEditor().getCaretPosition();
@@ -83,7 +84,7 @@ public class AutoCompleteComboBoxListener<T> implements EventHandler<KeyEvent> {
         moveCursor(t.length());
 
         if(!list.isEmpty()) {
-            comboBox.hide();
+//            comboBox.hide();
             comboBox.show();
         }
     }

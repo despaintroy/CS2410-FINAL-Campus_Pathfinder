@@ -123,7 +123,7 @@ class Dijkstra {
             }
         }
 
-        System.out.println("Done. (" + (System.currentTimeMillis()-startTime)/1000.0 +")");
+        System.out.println("Analyzed " + totalCalculations + " paths (" + (System.currentTimeMillis()-startTime)/1000.0 +"s)");
 
         Integer[] arr = new Integer[bestPath.size()];
         arr = bestPath.toArray(arr);
